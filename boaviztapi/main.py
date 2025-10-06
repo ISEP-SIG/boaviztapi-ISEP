@@ -1,5 +1,6 @@
 import json
 import logging
+from typing import AsyncIterator
 
 import anyio
 import markdown
@@ -18,6 +19,7 @@ import uvicorn
 
 from boaviztapi.routers.component_router import component_router
 from boaviztapi.routers.consumption_profile_router import consumption_profile
+from boaviztapi.routers.electricity_prices_router import electricity_prices_router, get_available_countries
 from boaviztapi.routers.iot_router import iot
 from boaviztapi.routers.peripheral_router import peripheral_router
 from boaviztapi.routers.server_router import server_router
@@ -27,13 +29,21 @@ from boaviztapi.routers.utils_router import utils_router
 from boaviztapi.utils.get_version import get_version_from_pyproject
 
 from fastapi.responses import HTMLResponse
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.inmemory import InMemoryBackend
+
+
+@contextlib.asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
+    yield
 
 
 # Serverless frameworks adds a 'stage' prefix to the route used to serve applications
 # We have to manage it to expose openapi doc on aws and generate proper links.
 stage = os.environ.get('STAGE', None)
 openapi_prefix = f"/{stage}" if stage else "/"
-app = FastAPI(root_path=openapi_prefix)  # Here is the magic
+app = FastAPI(lifespan=lifespan, root_path=openapi_prefix)  # Here is the magic
 version = get_version_from_pyproject()
 _logger = logging.getLogger(__name__)
 
@@ -70,6 +80,7 @@ app.include_router(component_router)
 app.include_router(iot)
 app.include_router(consumption_profile)
 app.include_router(utils_router)
+app.include_router(electricity_prices_router)
 
 if __name__ == '__main__':
     import uvicorn
