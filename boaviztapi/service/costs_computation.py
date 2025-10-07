@@ -48,9 +48,4 @@ def compute_single_cost(power: float, duration: int, location: str) -> float:
     """
     # Eur / MWh
     yearly_price = _electricity_prices_df.query(f"`ISO3 Code` == '{location}'")["Price (EUR/MWhe)"].mean()
-    print(f"yearly price: {yearly_price}")
-    print(f"duration: {duration}")
-    print(f"location: {location}")
-    print(f"power: {power}")
-    print(f"converted power to mwh: {power * 10 ** -6}")
     return yearly_price * duration * (power * 10 ** -6)

@@ -34,12 +34,14 @@ def get_price_for_country(iso3_country: str) -> dict | None:
         return None
 
     periodStart = datetime.now(timezone.utc).replace(hour=0, minute=0)
-    day = periodStart.day
-    periodEnd = datetime.now(timezone.utc).replace(day=day + 1, hour=0, minute=0)
+    periodEnd = periodEnd = periodStart + timedelta(days=1)
 
     periodStart = periodStart.strftime("%Y%m%d%H%M")  # YYYYMMDDHHMM e.g. 202509061200
     periodEnd = periodEnd.strftime("%Y%m%d%H%M")
 
     url = f"https://web-api.tp.entsoe.eu/api?documentType=A44&periodStart={periodStart}&periodEnd={periodEnd}&out_Domain={eic_code}&in_Domain={eic_code}&securityToken={security_token}"
     r = requests.get(url)
-    return xmltodict.parse(r.content)
+    if r.status_code == 200:
+        return xmltodict.parse(r.content)
+    _logger.error("get_price_for_country returned status code %s", r.status_code)
+    return None
