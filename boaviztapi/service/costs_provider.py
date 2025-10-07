@@ -1,6 +1,6 @@
 import logging
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 import pandas as pd
 import requests
@@ -34,7 +34,7 @@ def get_price_for_country(iso3_country: str) -> dict | None:
         return None
 
     periodStart = datetime.now(timezone.utc).replace(hour=0, minute=0)
-    periodEnd = periodEnd = periodStart + timedelta(days=1)
+    periodEnd = periodStart + timedelta(days=1)
 
     periodStart = periodStart.strftime("%Y%m%d%H%M")  # YYYYMMDDHHMM e.g. 202509061200
     periodEnd = periodEnd.strftime("%Y%m%d%H%M")
