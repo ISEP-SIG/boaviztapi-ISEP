@@ -25,7 +25,7 @@ def compute_electricity_costs(model: Union[Component, Device], duration=config["
         "unit": "€",
         "warnings": [
             "Default energy prices were used in this calculation. The energy price default"
-            "is the average yearly energy price in the given location."
+            " is the average yearly energy price in the given location."
         ]
     }
 

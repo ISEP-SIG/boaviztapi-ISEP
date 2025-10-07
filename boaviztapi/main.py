@@ -1,41 +1,42 @@
+import contextlib
 import json
 import logging
+import os
+import threading
+import time
 from typing import AsyncIterator
 
 import anyio
 import markdown
-import toml
-from fastapi.middleware.cors import CORSMiddleware
-import os
+import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
+from fastapi.responses import HTMLResponse
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.inmemory import InMemoryBackend
 from mangum import Mangum
 from starlette.requests import Request
 from starlette.responses import Response
-import contextlib
-import time
-import threading
-import uvicorn
 
+from boaviztapi.application_context import get_app_context
+from boaviztapi.routers.cloud_router import cloud_router
 from boaviztapi.routers.component_router import component_router
 from boaviztapi.routers.consumption_profile_router import consumption_profile
-from boaviztapi.routers.electricity_prices_router import electricity_prices_router, get_available_countries
+from boaviztapi.routers.electricity_prices_router import electricity_prices_router
 from boaviztapi.routers.iot_router import iot
 from boaviztapi.routers.peripheral_router import peripheral_router
 from boaviztapi.routers.server_router import server_router
-from boaviztapi.routers.cloud_router import cloud_router
 from boaviztapi.routers.terminal_router import terminal_router
 from boaviztapi.routers.utils_router import utils_router
 from boaviztapi.utils.get_version import get_version_from_pyproject
 
-from fastapi.responses import HTMLResponse
-from fastapi_cache import FastAPICache
-from fastapi_cache.backends.inmemory import InMemoryBackend
-
 
 @contextlib.asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
-    FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
+    # TODO: persist cache using postgres/redis, etc.
+    FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")  # initialize in-memory cache
+    _ = get_app_context()
     yield
 
 
@@ -46,7 +47,6 @@ openapi_prefix = f"/{stage}" if stage else "/"
 app = FastAPI(lifespan=lifespan, root_path=openapi_prefix)  # Here is the magic
 version = get_version_from_pyproject()
 _logger = logging.getLogger(__name__)
-
 origins = json.loads(os.getenv("ALLOWED_ORIGINS", '["*"]'))
 
 
