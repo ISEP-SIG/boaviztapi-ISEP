@@ -285,7 +285,7 @@ async def test_partial_server_2():
 async def test_partial_server_3():
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        res = await ac.post('/v1/server/?verbose=false', json={
+        res = await ac.post('/v1/server/?verbose=false&costs=false', json={
             "model": {
             },
             "configuration": {

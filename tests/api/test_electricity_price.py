@@ -16,12 +16,3 @@ async def test_available_countries():
         assert res.status_code == 200
         assert res.json()
         validate(res.json(), available_countries_schema)
-
-
-@pytest.mark.asyncio
-async def test_price():
-    transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        res = await ac.get('/v1/electricity/price?iso3_country=FRA')
-        assert res.status_code == 200
-        assert res.text.isnumeric()

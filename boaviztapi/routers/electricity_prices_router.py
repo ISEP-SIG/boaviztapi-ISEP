@@ -36,6 +36,9 @@ async def get_electricity_price(
         # error case
         error_msg = result["Acknowledgement_MarketDocument"]["Reason"]["text"]
         raise HTTPException(status_code=404, detail=f"{error_msg} not found")
-    values = result["Publication_MarketDocument"]["TimeSeries"][0]["Period"]["Point"]
+    timeseries = result["Publication_MarketDocument"]["TimeSeries"]
+    if len(timeseries) > 1:
+        timeseries = timeseries[0]
+    values = timeseries["Period"]["Point"]
     avg_price = ([float(record["price.amount"]) for record in values])
     return sum(avg_price) / len(avg_price)
