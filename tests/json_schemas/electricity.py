@@ -5,10 +5,16 @@ available_countries_schema = {
   "items": {
     "type": "object",
     "properties": {
-      "EIC_code": {
+      "zone_code": {
         "type": "string"
       },
-      "country_name": {
+      "name": {
+        "type": "string"
+      },
+      "subdivision_name": {
+        "type": "string"
+      },
+      "EIC_code": {
         "type": "string"
       },
       "alpha_3": {
@@ -16,8 +22,10 @@ available_countries_schema = {
       }
     },
     "required": [
+      "zone_code",
+      "name",
+      "subdivision_name",
       "EIC_code",
-      "country_name",
       "alpha_3"
     ]
   }
