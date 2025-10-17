@@ -11,14 +11,14 @@ available_countries_schema = {
       "country_name": {
         "type": "string"
       },
-      "ISO3 Code": {
+      "alpha_3": {
         "type": "string"
       }
     },
     "required": [
       "EIC_code",
       "country_name",
-      "ISO3 Code"
+      "alpha_3"
     ]
   }
 }
