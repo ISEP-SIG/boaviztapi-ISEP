@@ -225,3 +225,14 @@ electricity_carbon_intensity = {
     "estimationMethod": "TIME_SLICER_AVERAGE",
     "temporalGranularity": "hourly"
 }
+
+electricity_maps_price = {
+    "zone": "AT",
+    "datetime": "2025-10-24T10:00:00.000Z",
+    "createdAt": "2025-10-23T11:21:05.983Z",
+    "updatedAt": "2025-10-23T11:21:05.983Z",
+    "value": 82.4,
+    "unit": "EUR/MWh",
+    "source": "nordpool.com",
+    "temporalGranularity": "hourly"
+}

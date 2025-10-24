@@ -10,6 +10,7 @@ from boaviztapi import data_dir
 from boaviztapi.application_context import get_app_context
 from boaviztapi.dto.electricity.electricity import Country
 from boaviztapi.service.base import BaseService
+from boaviztapi.service.electricitymaps_service import ElectricityMapsService
 from boaviztapi.service.exceptions import APIError, APIAuthenticationError, APIMissingValueError, \
     APIResponseParsingError
 
@@ -18,7 +19,7 @@ _logger = logging.getLogger(__name__)
 df = pd.read_csv(os.path.join(data_dir, 'electricity/electricity_zones.csv'))
 df.fillna(value='', inplace=True)
 
-class ElectricityCostsProvider(BaseService):
+class ElectricityCostsProvider(ElectricityMapsService):
     """
     Provides functionality to retrieve and process electricity-costs-related data from one or more external APIs.
     """
@@ -36,6 +37,25 @@ class ElectricityCostsProvider(BaseService):
         Get the EIC code for a country.
         """
         return df.query(f"alpha_3 == '{iso3_country}' ")["EIC_code"].iloc[0]
+
+    @staticmethod
+    def get_price_for_country_elecmaps(zone: str, temporalGranularity: str = 'hourly') -> dict | None:
+        """
+        Get the latest electricity price for a country using the ElectricityMaps API.
+
+        Args:
+            zone: Zone code as defined in the ElectricityMaps API
+            temporalGranularity: The temporal granularity of the price data. Defaults to hourly.
+
+        Returns:
+            A JSON response from the ElectricityMaps API
+
+        Raises:
+            APIAuthenticationError: When the API key is not authorized to access this resource
+            APIError: When the API returns an unexpected response status code or it cannot be reached
+        """
+        url = f"{ElectricityMapsService.base_url}/price-day-ahead/latest?zone={zone}&temporalGranularity={temporalGranularity}"
+        return ElectricityMapsService._perform_request(url)
 
     @staticmethod
     def get_price_for_country(alpha3: str) -> dict | None:
