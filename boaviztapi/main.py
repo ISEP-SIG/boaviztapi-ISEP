@@ -20,6 +20,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from boaviztapi.application_context import get_app_context
+from boaviztapi.routers.auth_router import auth_router
 from boaviztapi.routers.cloud_router import cloud_router
 from boaviztapi.routers.component_router import component_router
 from boaviztapi.routers.consumption_profile_router import consumption_profile
@@ -81,6 +82,8 @@ app.include_router(iot)
 app.include_router(consumption_profile)
 app.include_router(utils_router)
 app.include_router(electricity_prices_router)
+
+app.include_router(auth_router)
 
 if __name__ == '__main__':
     import uvicorn
