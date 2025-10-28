@@ -13,8 +13,10 @@ class ApplicationContext:
     ELECTRICITYMAPS_API_KEY: str | None = None
     GOOGLE_CLIENT_ID: str | None = None
     GOOGLE_CLIENT_SECRET: str | None = None
+    SESSION_MIDDLEWARE_SECRET_KEY: str | None = None
 
-    dependencies = ["ENTSOE_API_KEY", "ELECTRICITYMAPS_API_KEY", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"]
+    dependencies = ["ENTSOE_API_KEY", "ELECTRICITYMAPS_API_KEY", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET",
+                    "SESSION_MIDDLEWARE_SECRET_KEY"]
 
     def load_secrets(self):
         # Check docker secrets first
