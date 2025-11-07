@@ -40,7 +40,7 @@ async def get_cloud_instance_usage(
         provider: str = Query(config["default_cloud_provider"], example=config["default_cloud_provider"]),
         instance_type: str = Query(config["default_cloud_instance"], example=config["default_cloud_instance"])):
     response = dict()
-    # TODO: Add instance pricing types to the vantage API scraper
+    # TODO: Add instance pricing types to the vantage API scraper --
     response["details"] = "WARNING: THIS DATA IS SYNTHETICALLY GENERATED FOR MOCK-UP PURPOSES."
     response["instance_pricing_types"] = _get_synthetic_costs()
     return response
