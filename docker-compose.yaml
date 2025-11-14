@@ -1,0 +1,23 @@
+services:
+
+  mongodb:
+    image: mongo:8.2.1
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_volume:/data/db
+  backend:
+    build: .
+    env_file:
+      - path: .env
+        required: true
+    ports:
+      - "5000:5000"
+    expose:
+      - 5000
+    depends_on:
+      - mongodb
+
+volumes:
+  mongodb_volume:
+
