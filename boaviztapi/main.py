@@ -21,6 +21,9 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
+
+from boaviztapi.routers.portfolio_router import portfolio_router
+from boaviztapi.routers.user_router import user_router
 from boaviztapi.utils.get_version import get_version_from_pyproject
 from boaviztapi.application_context import get_app_context
 from boaviztapi.routers.auth_router import auth_router
@@ -100,6 +103,9 @@ app.include_router(options_router)
 app.include_router(configuration_router)
 
 app.include_router(auth_router)
+app.include_router(user_router)
+
+app.include_router(portfolio_router)
 
 if __name__ == '__main__':
     import uvicorn

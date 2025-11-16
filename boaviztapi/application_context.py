@@ -24,6 +24,7 @@ class ApplicationContext:
     GOOGLE_CLIENT_SECRET: str | None = None
     SESSION_MIDDLEWARE_SECRET_KEY: str | None = None
     mongodb_client: AsyncMongoClient | None = None
+    database_name: str = None
 
     dependencies = ["ENTSOE_API_KEY", "ELECTRICITYMAPS_API_KEY", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET",
                     "SESSION_MIDDLEWARE_SECRET_KEY"]
@@ -51,6 +52,9 @@ class ApplicationContext:
         try:
             await self.mongodb_client.admin.command('ping')
             _logger.info("The MongoDB server is available. Continuing start-up...")
+            self.database_name = os.getenv("MONGODB_DATABASE")
+            if not self.database_name:
+                raise RuntimeError("Database name is not set! Please set it in the environment variables")
         except ConnectionFailure as e:
             _logger.error("The MongoDB server is not reachable. Shutting down the server...", e)
             exit(1)
