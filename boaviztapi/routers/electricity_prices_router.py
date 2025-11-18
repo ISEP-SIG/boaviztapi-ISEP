@@ -9,6 +9,7 @@ from boaviztapi.routers.openapi_doc.descriptions import electricity_available_co
     carbon_intensity, power_breakdown
 from boaviztapi.routers.openapi_doc.examples import electricity_carbon_intensity, electricity_power_breakdown, \
     electricity_maps_price
+from boaviztapi.service.cache.cache import CacheService
 from boaviztapi.service.carbon_intensity_provider import CarbonIntensityProvider
 from boaviztapi.service.costs_provider import ElectricityCostsProvider
 from boaviztapi.service.exceptions import APIMissingValueError, APIError, APIAuthenticationError
@@ -28,6 +29,7 @@ async def get_available_countries():
 
 
 @electricity_prices_router.get('/price', description=electricity_price,
+                               response_model=Country,
                                responses={200: {
                                    "description": "Successful Response",
                                    "content": {"application/json": {"example": electricity_maps_price}}
@@ -45,6 +47,10 @@ async def get_electricity_price(
         raise HTTPException(status_code=404, detail=str(e)) from e
     except APIError as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
+
+@electricity_prices_router.get('/price', description="TEST")
+async def get_electricity_prices():
+    return ElectricityCostsProvider.get_cache_scheduler().get_results()
 
 
 @electricity_prices_router.get('/carbon_intensity', description=carbon_intensity,
