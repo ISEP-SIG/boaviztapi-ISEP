@@ -43,7 +43,7 @@ from boaviztapi.routers.utils_router import utils_router
 from boaviztapi.service.auth.session_backend import SessionAuthBackend
 
 logging.basicConfig(
-    level=logging.INFO,  # or INFO
+    level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 _logger = logging.getLogger(__name__)
@@ -111,10 +111,8 @@ app.include_router(utils_router)
 app.include_router(electricity_prices_router)
 app.include_router(options_router)
 app.include_router(configuration_router)
-
 app.include_router(auth_router)
 app.include_router(user_router)
-
 app.include_router(portfolio_router)
 
 if __name__ == '__main__':

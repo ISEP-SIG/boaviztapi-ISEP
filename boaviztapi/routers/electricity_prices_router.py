@@ -6,10 +6,9 @@ from pydantic import AfterValidator
 
 from boaviztapi.dto.electricity.electricity import Country
 from boaviztapi.routers.openapi_doc.descriptions import electricity_available_countries, electricity_price, \
-    carbon_intensity, power_breakdown
+    carbon_intensity, power_breakdown, electricity_prices_cache
 from boaviztapi.routers.openapi_doc.examples import electricity_carbon_intensity, electricity_power_breakdown, \
     electricity_maps_price
-from boaviztapi.service.cache.cache import CacheService
 from boaviztapi.service.carbon_intensity_provider import CarbonIntensityProvider
 from boaviztapi.service.costs_provider import ElectricityCostsProvider
 from boaviztapi.service.exceptions import APIMissingValueError, APIError, APIAuthenticationError
@@ -48,9 +47,14 @@ async def get_electricity_price(
     except APIError as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 
-@electricity_prices_router.get('/price', description="TEST")
+
+@electricity_prices_router.get('/prices', description=electricity_prices_cache,
+                               responses={200: {
+                                   "description": "Successful Response",
+                                   "content": {"application/json": {"example": {"https://api.electricitymaps.com/v3/price-day-ahead/latest?zone=AT&temporalGranularity=hourly": {"zone": "AT", "datetime": "2025-11-19T20:00:00.000Z", "createdAt": "2025-11-18T12:21:16.175Z", "updatedAt": "2025-11-18T12:21:16.175Z", "value": 124.81, "unit": "EUR/MWh", "source": "nordpool.com", "temporalGranularity": "hourly"}}}}
+                               }})
 async def get_electricity_prices():
-    return ElectricityCostsProvider.get_cache_scheduler().get_results()
+    return await ElectricityCostsProvider.get_cache_scheduler().get_results()
 
 
 @electricity_prices_router.get('/carbon_intensity', description=carbon_intensity,
@@ -91,3 +95,4 @@ async def get_power_breakdown(
         raise HTTPException(status_code=401, detail=str(e)) from e
     except APIError as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
+
