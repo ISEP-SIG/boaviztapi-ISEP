@@ -174,3 +174,4 @@ electricity_price = "# ✔Get the latest electricity day-ahead price for one loc
 electricity_prices_cache = "# ✔ ️Get the latest electricity day-ahead prices for all the available locations.\n"
 carbon_intensity = "# ✔ ️Get the latest carbon intensity values for a given electricity zone.\n"
 power_breakdown = "# ✔ ️Get the power breakdown values for a given electricity zone (percentage of fossil vs renewable resources used to procure the energy).\n"
+power_breakdowns_cache = "# ✔ ️Get the power breakdown values for all the electricity zones (percentage of fossil vs renewable resources used to procure the energy).\n"

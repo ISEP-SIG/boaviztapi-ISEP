@@ -22,9 +22,11 @@ from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 
+from boaviztapi.routers.openapi_doc.descriptions import carbon_intensity
 from boaviztapi.routers.portfolio_router import portfolio_router
 from boaviztapi.routers.user_router import user_router
 from boaviztapi.service.cache.cache import CacheService
+from boaviztapi.service.carbon_intensity_provider import CarbonIntensityProvider
 from boaviztapi.service.costs_provider import ElectricityCostsProvider
 from boaviztapi.utils.get_version import get_version_from_pyproject
 from boaviztapi.application_context import get_app_context
@@ -56,9 +58,13 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     _ctx = get_app_context()
     _ctx.load_secrets()
     await _ctx.create_db_connection()
+
     _logger.info("Starting caches...")
     electricity_prices_cache = ElectricityCostsProvider.get_cache_scheduler()
+    carbon_intensity_cache = CarbonIntensityProvider.get_cache_scheduler()
     await electricity_prices_cache.startup()
+    await carbon_intensity_cache.startup()
+
     yield
     await _ctx.close_db_connection()
 
