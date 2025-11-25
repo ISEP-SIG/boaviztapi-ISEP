@@ -50,6 +50,14 @@ class GenericPydanticCRUDService(Generic[TModel]):
             scoped["user_id"] = self._user_id
         return scoped
 
+    def _scope(self, base: Optional[Mapping[str, Any]] = None) -> dict[str, Any]:
+        """
+        Merge the provided filter with the current user scope when user_id is set.
+        """
+        scoped = dict(base or {})
+        if self._user_id:
+            scoped["user_id"] = self._user_id
+        return scoped
     async def create(self, item: TModel = Body(...)):
         """
         Create a new record in the database.
