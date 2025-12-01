@@ -2,9 +2,12 @@ from fastapi import APIRouter, Body, status
 from fastapi.params import Depends
 
 from boaviztapi.dto.auth.user_dto import UserPublicDTO
-from boaviztapi.model.crud_models.configuration_model import ConfigurationModel, ConfigurationCollection
+from boaviztapi.model.crud_models.configuration_model import ConfigurationModel, ConfigurationCollection, \
+    ConfigurationWithResultsCollection, OnPremiseConfigurationModel, CloudConfigurationModel, \
+    ConfigurationModelWithResults
 from boaviztapi.model.services.configuration_service import ConfigurationService
 from boaviztapi.routers.pydantic_based_router import validate_id
+from boaviztapi.service.sustainability_provider import get_cloud_impact, get_server_impact_on_premise
 from boaviztapi.service.auth.dependencies import get_current_user
 
 configuration_router = APIRouter(
@@ -22,7 +25,8 @@ def get_scoped_configuration_service(current_user: UserPublicDTO = Depends(get_c
                            status_code=status.HTTP_201_CREATED,
                            response_model_by_alias=False,
                            )
-async def create_configuration(configuration: ConfigurationModel = Body(...), service: ConfigurationService = Depends(get_scoped_configuration_service)):
+async def create_configuration(configuration: ConfigurationModel = Body(...), service: ConfigurationService = Depends(
+    get_scoped_configuration_service)):
     """
     Insert a new configuration record.
 
@@ -39,12 +43,32 @@ async def create_configuration(configuration: ConfigurationModel = Body(...), se
 async def list_configurations(service: ConfigurationService = Depends(get_scoped_configuration_service)):
     return await service.get_all()
 
+@configuration_router.get("/with-results",
+                          response_description="List all configurations with their sustainability and cost results",
+                          response_model=ConfigurationWithResultsCollection,
+                          response_model_by_alias=False,
+                          )
+async def list_configurations_with_results(service: ConfigurationService = Depends(get_scoped_configuration_service)):
+    items = await service.get_all()
+    configurations = items.model_dump()['items']
+    extended_configs = []
+    for c in configurations:
+        if c['type'] == 'cloud':
+            results = await get_cloud_impact(CloudConfigurationModel.model_validate(c), verbose=False)
+        else:
+            results = await get_server_impact_on_premise(OnPremiseConfigurationModel.model_validate(c), verbose=False, costs=True)
+        extended_configs.append(ConfigurationModelWithResults(results=results, configuration=c))
+    return ConfigurationWithResultsCollection(items=extended_configs)
+
+
+
 @configuration_router.get("/{id}",
                           response_description="Get a single configuration",
                           response_model=ConfigurationModel,
                           response_model_by_alias=False,
                           )
-async def find_configuration(id: str = Depends(validate_id), service: ConfigurationService = Depends(get_scoped_configuration_service)):
+async def find_configuration(id: str = Depends(validate_id), service: ConfigurationService = Depends(
+    get_scoped_configuration_service)):
     return await service.get_by_id(id)
 
 @configuration_router.put(
@@ -53,11 +77,13 @@ async def find_configuration(id: str = Depends(validate_id), service: Configurat
     response_model=ConfigurationModel,
     response_model_by_alias=False,
 )
-async def update_configuration(id: str = Depends(validate_id), configuration: ConfigurationModel = Body(...), service: ConfigurationService = Depends(get_scoped_configuration_service)):
+async def update_configuration(id: str = Depends(validate_id), configuration: ConfigurationModel = Body(...), service: ConfigurationService = Depends(
+    get_scoped_configuration_service)):
     return await service.update(id, configuration)
 
 
 @configuration_router.delete("/{id}", response_description="Delete a configuration")
-async def delete_configuration(id: str = Depends(validate_id), service: ConfigurationService = Depends(get_scoped_configuration_service)):
+async def delete_configuration(id: str = Depends(validate_id), service: ConfigurationService = Depends(
+    get_scoped_configuration_service)):
     return await service.delete(id)
 
