@@ -125,7 +125,7 @@ ConfigurationModel = Annotated[
 ]
 
 class ConfigurationModelWithResults(BaseModel):
-    configuration: ConfigurationModel = Field(...)
+    configuration: ConfigurationModel
     results: Optional[Dict[str, Any]] = Field(default=None)
 
 

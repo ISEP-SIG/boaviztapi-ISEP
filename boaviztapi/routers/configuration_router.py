@@ -3,11 +3,10 @@ from fastapi.params import Depends
 
 from boaviztapi.dto.auth.user_dto import UserPublicDTO
 from boaviztapi.model.crud_models.configuration_model import ConfigurationModel, ConfigurationCollection, \
-    ConfigurationWithResultsCollection, OnPremiseConfigurationModel, CloudConfigurationModel, \
-    ConfigurationModelWithResults
+    ConfigurationWithResultsCollection
 from boaviztapi.model.services.configuration_service import ConfigurationService
 from boaviztapi.routers.pydantic_based_router import validate_id
-from boaviztapi.service.sustainability_provider import get_cloud_impact, get_server_impact_on_premise
+from boaviztapi.service.sustainability_provider import add_results_to_configuration
 from boaviztapi.service.auth.dependencies import get_current_user
 
 configuration_router = APIRouter(
@@ -53,14 +52,8 @@ async def list_configurations_with_results(service: ConfigurationService = Depen
     configurations = items.model_dump()['items']
     extended_configs = []
     for c in configurations:
-        if c['type'] == 'cloud':
-            results = await get_cloud_impact(CloudConfigurationModel.model_validate(c), verbose=False)
-        else:
-            results = await get_server_impact_on_premise(OnPremiseConfigurationModel.model_validate(c), verbose=False, costs=True)
-        extended_configs.append(ConfigurationModelWithResults(results=results, configuration=c))
+        extended_configs.append(await add_results_to_configuration(c))
     return ConfigurationWithResultsCollection(items=extended_configs)
-
-
 
 @configuration_router.get("/{id}",
                           response_description="Get a single configuration",

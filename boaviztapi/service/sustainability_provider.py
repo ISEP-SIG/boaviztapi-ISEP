@@ -1,8 +1,11 @@
 from typing import Optional, List
 
+from pydantic import TypeAdapter
+
 from boaviztapi import config
 from boaviztapi.dto.device.device import mapper_cloud_instance, mapper_server
-from boaviztapi.model.crud_models.configuration_model import CloudConfigurationModel, OnPremiseConfigurationModel
+from boaviztapi.model.crud_models.configuration_model import CloudConfigurationModel, OnPremiseConfigurationModel, \
+    ConfigurationModel, ConfigurationModelWithResults
 from boaviztapi.routers.cloud_router import cloud_instance_impact
 from boaviztapi.routers.server_router import server_impact
 from boaviztapi.service.archetype import get_cloud_instance_archetype, get_server_archetype
@@ -44,3 +47,13 @@ async def get_server_impact_on_premise(
         criteria=criteria,
         costs=costs,
         location=server.usage.localisation)
+
+
+async def add_results_to_configuration(c: ConfigurationModel):
+    _type = c['type'] if isinstance(c, dict) else c.type
+    if _type == 'cloud':
+        results = await get_cloud_impact(CloudConfigurationModel.model_validate(c), verbose=False)
+    else:
+        results = await get_server_impact_on_premise(OnPremiseConfigurationModel.model_validate(c), verbose=False,
+                                                     costs=True)
+    return ConfigurationModelWithResults(results=results, configuration=c)
