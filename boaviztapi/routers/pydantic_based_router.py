@@ -68,7 +68,8 @@ class GenericPydanticCRUDService(Generic[TModel]):
         result = await self.mongo_collection.insert_one(new_item)
         new_item["_id"] = result.inserted_id
 
-        return self.adapter.validate_python(new_item)
+        result = self.adapter.validate_python(new_item)
+        return self.adapter.dump_python(result, exclude_none=True, mode='json')
 
     async def get_all(self) -> BaseCRUDCollection[TModel]:
         """
@@ -86,7 +87,8 @@ class GenericPydanticCRUDService(Generic[TModel]):
         if (
             item := await self.mongo_collection.find_one(self._scope({"_id": ObjectId(id)}))
         ) is not None:
-            return self.adapter.validate_python(item)
+            result = self.adapter.validate_python(item)
+            return self.adapter.dump_python(result, exclude_none=True, mode='json')
 
         raise HTTPException(status_code=404, detail=f"Item from collection '{self.collection_name}' with id={id} was not found")
 
@@ -116,7 +118,8 @@ class GenericPydanticCRUDService(Generic[TModel]):
         if (
             item := await self.mongo_collection.find_one(self._scope(dict(filter)), **kwargs)
         ) is not None:
-            return self.adapter.validate_python(item)
+            result = self.adapter.validate_python(item)
+            return self.adapter.dump_python(result, exclude_none=True, mode='json')
         self._logger.warning(f"No item was found in the '{self.collection_name}' collection with the specified filter: {filter}.")
         raise HTTPException(status_code=404, detail="No item found with the specified filter!")
 
@@ -138,13 +141,15 @@ class GenericPydanticCRUDService(Generic[TModel]):
                 return_document=ReturnDocument.AFTER,
             )
             if update_result is not None:
-                return self.adapter.validate_python(update_result)
+                result = self.adapter.validate_python(update_result)
+                return self.adapter.dump_python(result, exclude_none=True, mode='json')
             else:
                 raise HTTPException(status_code=404, detail=f"Item from collection '{self.collection_name}' with id={id} was not found")
 
         # The update is empty, but we should still return the matching document:
         if (existing_item := await self.mongo_collection.find_one(self._scope({"_id": ObjectId(id)}))) is not None:
-            return self.adapter.validate_python(existing_item)
+            result = self.adapter.validate_python(existing_item)
+            return self.adapter.dump_python(result, exclude_none=True, mode='json')
 
         raise HTTPException(status_code=404, detail=f"Item from collection '{self.collection_name}' with id={id} was not found")
 
