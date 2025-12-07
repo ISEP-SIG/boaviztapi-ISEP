@@ -1,5 +1,5 @@
 import os
-from typing import List, Union, Optional
+from typing import List, Optional
 
 from fastapi import APIRouter, Body, HTTPException, Query
 
@@ -14,7 +14,6 @@ from boaviztapi.routers.openapi_doc.examples import server_configuration_example
 from boaviztapi.service.archetype import get_server_archetype, get_device_archetype_lst
 from boaviztapi.service.verbose import verbose_device
 from boaviztapi.service.impacts_computation import compute_impacts
-from boaviztapi.service.costs_computation import compute_electricity_costs
 
 server_router = APIRouter(
     prefix='/v1/server',
