@@ -1,5 +1,5 @@
 import os
-from typing import Union, Any
+from typing import Union
 
 import pandas as pd
 from boaviztapi import config

@@ -32,7 +32,7 @@ class CurrencyConverter:
         Returns:
             Dictionary containing the conversion rates for each currency.
         """
-        CurrencyConverter._validate_currency(base_currency)
+        CurrencyConverter.validate_currency(base_currency)
         _cache = await CurrencyConverter.get_cache_scheduler()
         _cached_results = await _cache.get_results()
         return _cached_results[CurrencyConverter._url_for_currency(base_currency)]["rates"]
@@ -63,8 +63,8 @@ class CurrencyConverter:
         if source_currency == target_currency:
             return CurrencyWithValue(symbol=source_currency, value=amount, name=None)
 
-        CurrencyConverter._validate_currency(source_currency)
-        CurrencyConverter._validate_currency(target_currency)
+        CurrencyConverter.validate_currency(source_currency)
+        CurrencyConverter.validate_currency(target_currency)
 
         table = await CurrencyConverter._get_currency_table(base_currency=source_currency)
         return CurrencyWithValue(symbol=target_currency, value=amount * table[target_currency], name=None)
@@ -74,9 +74,9 @@ class CurrencyConverter:
         return f"{url}?base={currency}"
 
     @staticmethod
-    def _validate_currency(c: str) -> bool:
+    def validate_currency(c: str) -> str:
         currencies: List[Currency] = CurrencyConverter.get_available_currencies()
         currency_symbols = [currency.symbol for currency in currencies]
         if c not in [currency.symbol for currency in currencies]:
             raise ValueError(f"Invalid or unsupported source currency: '{c}'. The supported values are: {currency_symbols}")
-        return True
+        return c

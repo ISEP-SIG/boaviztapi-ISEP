@@ -26,11 +26,11 @@ class CostCalculator:
         avg_block = elec_costs.get("avg") if isinstance(elec_costs, dict) else None
         if not avg_block or "price" not in avg_block:
             price_per_mwh = 0.0
-            unit = "EUR" # Needs to be fixed later once we get actual currency or convert to euro.
+            unit = "EUR/MWh"
             warnings = [f"No electricity costs available for location '{server.usage.localisation}'."]
         else:
             price_per_mwh = avg_block["price"]
-            unit = avg_block.get("unit", "EUR")
+            unit = avg_block.get("unit", "EUR/MWh")
             warnings = elec_costs.get("warnings", [])
 
         impact = await get_server_impact_on_premise(
