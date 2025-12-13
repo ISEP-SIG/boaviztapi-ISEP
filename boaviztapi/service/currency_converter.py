@@ -48,7 +48,28 @@ class CurrencyConverter:
         return currencies
 
     @staticmethod
-    async def convert(source_currency: str, target_currency: str, amount: float) -> CurrencyWithValue:
+    def get_currency_by_symbol(symbol: str) -> Currency | None:
+        """
+        Fetches a currency object based on the provided symbol.
+
+        Args:
+            symbol: A string representing the currency symbol to search for.
+
+        Returns:
+            Currency: The corresponding Currency object that matches the given symbol.
+
+        Raises:
+            ValueError : If no currency is found matching the provided symbol.
+        """
+        _currencies = CurrencyConverter.get_available_currencies()
+        CurrencyConverter.validate_currency(symbol)
+        for cur in _currencies:
+            if cur.symbol == symbol:
+                return cur
+        return None
+
+    @staticmethod
+    async def convert(source_currency: str, target_currency: str, amount: float) -> CurrencyWithValue | None:
         """
         Converts an amount of a source currency to a target currency.
 
@@ -60,6 +81,8 @@ class CurrencyConverter:
         Returns:
             Amount in target currency.
         """
+        if source_currency is None or target_currency is None or amount is None:
+            return None
         if source_currency == target_currency:
             return CurrencyWithValue(symbol=source_currency, value=amount, name=None)
 
