@@ -101,6 +101,7 @@ async def test_fetch_all_with_errors_saved(mock_db):
 @pytest.mark.asyncio
 async def test_startup_logic(mock_db):
     """Tests the full startup sequence including scheduler."""
+    CacheService._instances = {}
     with patch("boaviztapi.application_context.get_app_context") as mock_ctx:
         # Mocking the deeply nested app context for MongoDB
         mock_db_client = MagicMock()
