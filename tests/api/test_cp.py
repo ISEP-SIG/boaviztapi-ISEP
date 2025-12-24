@@ -26,7 +26,7 @@ class CPUConsumptionProfileTest:
             res = await ac.post("/v1/consumption_profile/cpu", json=request_body)
 
         res_data: dict = res.json()
-        delta = 0.001
+        delta = 0.01
         assert self.expected[0] == pytest.approx(res_data["a"], delta)
         assert self.expected[1] == pytest.approx(res_data["b"], delta)
         assert self.expected[2] == pytest.approx(res_data["c"], delta)

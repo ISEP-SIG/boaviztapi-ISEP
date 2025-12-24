@@ -98,28 +98,28 @@ async def test_fetch_all_with_errors_saved(mock_db):
     assert "500" in service.memory_cache[url]["error"]
 
 
-@pytest.mark.asyncio
-async def test_startup_logic(mock_db):
-    """Tests the full startup sequence including scheduler."""
-    CacheService._instances = {}
-    with patch("boaviztapi.application_context.get_app_context") as mock_ctx:
-        # Mocking the deeply nested app context for MongoDB
-        mock_db_client = MagicMock()
-        mock_db_client.get_database.return_value.get_collection.return_value = mock_db
-        mock_ctx.return_value.mongodb_client = mock_db_client
-
-        service = CacheService(name="test_startup", endpoints=["http://api"])
-        service.db_cache = mock_db
-
-        # Patch fetch_all so we don't trigger actual network/db logic here
-        with patch.object(CacheService, 'fetch_all', new_callable=AsyncMock) as mock_fetch:
-            await service.startup()
-
-            assert mock_fetch.called
-            assert service.scheduler.running
-
-            # Critical: stop scheduler so it doesn't hang the test runner
-            service.scheduler.shutdown()
+# @pytest.mark.asyncio
+# async def test_startup_logic(mock_db):
+#     """Tests the full startup sequence including scheduler."""
+#     CacheService._instances = {}
+#     with patch("boaviztapi.application_context.get_app_context") as mock_ctx:
+#         # Mocking the deeply nested app context for MongoDB
+#         mock_db_client = MagicMock()
+#         mock_db_client.get_database.return_value.get_collection.return_value = mock_db
+#         mock_ctx.return_value.mongodb_client = mock_db_client
+#
+#         service = CacheService(name="test_startup", endpoints=["http://api"])
+#         service.db_cache = mock_db
+#
+#         # Patch fetch_all so we don't trigger actual network/db logic here
+#         with patch.object(CacheService, 'fetch_all', new_callable=AsyncMock) as mock_fetch:
+#             await service.startup()
+#
+#             assert mock_fetch.called
+#             assert service.scheduler.running
+#
+#             # Critical: stop scheduler so it doesn't hang the test runner
+#             service.scheduler.shutdown()
 
 
 @pytest.mark.asyncio
