@@ -25,6 +25,9 @@ class DummyCtx:
 
 
 def pytest_configure(config):
+    for arg in config.args:
+        if "test_cache.py" in str(arg):
+            return  # Do not apply patches when running caching tests
     logging.debug("pytest_configure: applying patches before test imports")
 
     # Patch get_app_context in application_context module
