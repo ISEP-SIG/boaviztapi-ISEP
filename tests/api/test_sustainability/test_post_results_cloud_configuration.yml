@@ -17,19 +17,19 @@ costs:
     warnings: []
   usd:
     breakdown:
-      operating_costs: 5.848779
+      operating_costs: 5.85
     currency:
       name: United States Dollar
       symbol: USD
-    total_cost: 5.848779
+    total_cost: 5.85
     warnings: []
 impacts:
   adp:
     description: Use of minerals and fossil ressources
     embedded:
-      max: 0.01767
-      min: 0.00814
-      value: 0.0124
+      max: 0.02
+      min: 0.01
+      value: 0.01
       warnings:
       - End of life is not included in the calculation
     unit: kgSbeq
@@ -47,9 +47,9 @@ impacts:
       - End of life is not included in the calculation
     unit: kgCO2eq
     use:
-      max: 0.3511
-      min: 0.2634
-      value: 0.292
+      max: 0.35
+      min: 0.26
+      value: 0.29
   pe:
     description: Consumption of primary energy
     embedded:
@@ -60,8 +60,8 @@ impacts:
       - End of life is not included in the calculation
     unit: MJ
     use:
-      max: 6.641
-      min: 4.981
+      max: 6.64
+      min: 4.98
       value: 5.5
 verbose:
   ASSEMBLY-1:
@@ -82,9 +82,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 0.835
-          min: 0.835
-          value: 0.835
+          max: 0.83
+          min: 0.83
+          value: 0.83
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -92,9 +92,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 8.575
-          min: 8.575
-          value: 8.575
+          max: 8.57
+          min: 8.57
+          value: 8.57
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -115,9 +115,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.003459
-          min: 0.002525
-          value: 0.00252
+          max: 0.0
+          min: 0.0
+          value: 0.0
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -156,11 +156,11 @@ verbose:
       unit: kg Sbeq/kWh
       value: 0.0
     avg_power:
-      max: 3.740875
-      min: 3.740875
+      max: 3.74
+      min: 3.74
       status: COMPLETED
       unit: W
-      value: 3.740875
+      value: 3.74
     core_units:
       max: 16
       min: 16
@@ -201,9 +201,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.002551
-          min: 0.00255
-          value: 0.00255
+          max: 0.0
+          min: 0.0
+          value: 0.0
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -214,16 +214,16 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 5.846
-          min: 1.325
+          max: 5.85
+          min: 1.32
           value: 2.1
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
         use:
-          max: 0.1683
-          min: 0.1683
-          value: 0.1683
+          max: 0.17
+          min: 0.17
+          value: 0.17
       pe:
         description: Consumption of primary energy
         embedded:
@@ -234,9 +234,9 @@ verbose:
           - End of life is not included in the calculation
         unit: MJ
         use:
-          max: 3.184
-          min: 3.184
-          value: 3.184
+          max: 3.18
+          min: 3.18
+          value: 3.18
     manufacturer:
       max: Annapurna Labs
       min: Annapurna Labs
@@ -259,17 +259,17 @@ verbose:
       source: From TDP
       status: COMPLETED
       value:
-        a: 20.339174
-        b: 0.072217
-        c: 20.451103
-        d: -3.161211
+        a: 20.34
+        b: 0.07
+        c: 20.45
+        d: -3.16
     pe_factor:
-      max: 8.511
-      min: 8.511
+      max: 8.51
+      min: 8.51
       source: ADPf / (1-%renewable_energy)
       status: COMPLETED
       unit: MJ/kWh
-      value: 8.511
+      value: 8.51
     tdp:
       max: 40
       min: 40
@@ -322,9 +322,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.000461
-          min: 0.000461
-          value: 0.000461
+          max: 0.0
+          min: 0.0
+          value: 0.0
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -332,9 +332,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 8.262
-          min: 8.262
-          value: 8.262
+          max: 8.26
+          min: 8.26
+          value: 8.26
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -362,9 +362,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.01038
-          min: 0.002075
-          value: 0.0062
+          max: 0.01
+          min: 0.0
+          value: 0.01
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -373,7 +373,7 @@ verbose:
         description: Total climate change
         embedded:
           max: 30.38
-          min: 6.075
+          min: 6.08
           value: 18.0
           warnings:
           - End of life is not included in the calculation
@@ -409,11 +409,11 @@ verbose:
       unit: kg Sbeq/kWh
       value: 0.0
     avg_power:
-      max: 1.136
-      min: 1.136
+      max: 1.14
+      min: 1.14
       status: COMPLETED
       unit: W
-      value: 1.136
+      value: 1.14
     capacity:
       max: 16.0
       min: 16.0
@@ -421,12 +421,12 @@ verbose:
       unit: GB
       value: 16.0
     density:
-      max: 2.375
-      min: 0.625
+      max: 2.38
+      min: 0.62
       source: Average of 11 rows
       status: COMPLETED
       unit: GB/cm2
-      value: 1.244364
+      value: 1.24
     duration:
       unit: hours
       value: 100
@@ -448,9 +448,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.000826
-          min: 0.000529
-          value: 0.00063
+          max: 0.0
+          min: 0.0
+          value: 0.0
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -468,9 +468,9 @@ verbose:
           - End of life is not included in the calculation
         unit: kgCO2eq
         use:
-          max: 0.05112
-          min: 0.05112
-          value: 0.05112
+          max: 0.05
+          min: 0.05
+          value: 0.05
       pe:
         description: Consumption of primary energy
         embedded:
@@ -481,21 +481,21 @@ verbose:
           - End of life is not included in the calculation
         unit: MJ
         use:
-          max: 0.9668
-          min: 0.9668
-          value: 0.9668
+          max: 0.97
+          min: 0.97
+          value: 0.97
     params:
       source: '(ram_electrical_factor_per_go : 0.284) * (ram_capacity: 16.0) '
       status: COMPLETED
       value:
-        a: 4.544
+        a: 4.54
     pe_factor:
-      max: 8.511
-      min: 8.511
+      max: 8.51
+      min: 8.51
       source: ADPf / (1-%renewable_energy)
       status: COMPLETED
       unit: MJ/kWh
-      value: 8.511
+      value: 8.51
     time_workload:
       max: 100.0
       min: 0.0
@@ -523,11 +523,11 @@ verbose:
     unit: kg Sbeq/kWh
     value: 0.0
   avg_power:
-    max: 7.803
-    min: 5.85225
+    max: 7.8
+    min: 5.85
     status: COMPLETED
     unit: W
-    value: 6.486244
+    value: 6.49
   duration:
     unit: hours
     value: 100
@@ -556,12 +556,12 @@ verbose:
     unit: ratio /1
     value: 0.33
   pe_factor:
-    max: 8.511
-    min: 8.511
+    max: 8.51
+    min: 8.51
     source: ADPf / (1-%renewable_energy)
     status: COMPLETED
     unit: MJ/kWh
-    value: 8.511
+    value: 8.51
   usage_location:
     status: INPUT
     unit: CodSP3 - NCS Country Codes - NATO
