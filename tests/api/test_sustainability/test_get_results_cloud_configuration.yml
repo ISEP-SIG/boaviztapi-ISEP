@@ -17,11 +17,11 @@ costs:
     warnings: []
   usd:
     breakdown:
-      operating_costs: 29.185289999999995
+      operating_costs: 29.18529
     currency:
       name: United States Dollar
       symbol: USD
-    total_cost: 29.185289999999995
+    total_cost: 29.18529
     warnings: []
 impacts:
   adp:
@@ -34,9 +34,9 @@ impacts:
       - End of life is not included in the calculation
     unit: kgSbeq
     use:
-      max: 1.285e-07
-      min: 9.636e-08
-      value: 1.07e-07
+      max: 0.0
+      min: 0.0
+      value: 0.0
   gwp:
     description: Total climate change
     embedded:
@@ -72,9 +72,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 8.813e-08
-          min: 8.813e-08
-          value: 8.813e-08
+          max: 0.0
+          min: 0.0
+          value: 0.0
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -149,18 +149,18 @@ verbose:
       value: 1
   CPU-1:
     adp_factor:
-      max: 3.29318e-08
-      min: 3.29318e-08
-      source: ADEME Base IMPACTS ®
+      max: 0.0
+      min: 0.0
+      source: ADEME Base IMPACTS Â®
       status: COMPLETED
       unit: kg Sbeq/kWh
-      value: 3.29318e-08
+      value: 0.0
     avg_power:
-      max: 1.8704375
-      min: 1.8704375
+      max: 1.870437
+      min: 1.870437
       status: COMPLETED
       unit: W
-      value: 1.8704375
+      value: 1.870437
     core_units:
       max: 16
       min: 16
@@ -208,9 +208,9 @@ verbose:
           - End of life is not included in the calculation
         unit: kgSbeq
         use:
-          max: 6.16e-08
-          min: 6.16e-08
-          value: 6.16e-08
+          max: 0.0
+          min: 0.0
+          value: 0.0
       gwp:
         description: Total climate change
         embedded:
@@ -259,10 +259,10 @@ verbose:
       source: From TDP
       status: COMPLETED
       value:
-        a: 20.339173674705552
-        b: 0.0722167997542425
-        c: 20.451103306605262
-        d: -3.161210693447459
+        a: 20.339174
+        b: 0.072217
+        c: 20.451103
+        d: -3.161211
     pe_factor:
       max: 8.511
       min: 8.511
@@ -322,9 +322,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.0002306
-          min: 0.0002306
-          value: 0.0002306
+          max: 0.000231
+          min: 0.000231
+          value: 0.000231
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -402,12 +402,12 @@ verbose:
       value: 2.0
   RAM-1:
     adp_factor:
-      max: 3.29318e-08
-      min: 3.29318e-08
-      source: ADEME Base IMPACTS ®
+      max: 0.0
+      min: 0.0
+      source: ADEME Base IMPACTS Â®
       status: COMPLETED
       unit: kg Sbeq/kWh
-      value: 3.29318e-08
+      value: 0.0
     avg_power:
       max: 0.568
       min: 0.568
@@ -426,7 +426,7 @@ verbose:
       source: Average of 11 rows
       status: COMPLETED
       unit: GB/cm2
-      value: 1.2443636363636363
+      value: 1.244364
     duration:
       unit: hours
       value: 1000
@@ -448,16 +448,16 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.0004129
-          min: 0.0002643
+          max: 0.000413
+          min: 0.000264
           value: 0.00031
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
         use:
-          max: 1.871e-08
-          min: 1.871e-08
-          value: 1.871e-08
+          max: 0.0
+          min: 0.0
+          value: 0.0
       gwp:
         description: Total climate change
         embedded:
@@ -516,18 +516,18 @@ verbose:
       unit: /1
       value: 1.0
   adp_factor:
-    max: 3.29318e-08
-    min: 3.29318e-08
-    source: ADEME Base IMPACTS ®
+    max: 0.0
+    min: 0.0
+    source: ADEME Base IMPACTS Â®
     status: COMPLETED
     unit: kg Sbeq/kWh
-    value: 3.29318e-08
+    value: 0.0
   avg_power:
-    max: 3.9015000000000004
+    max: 3.9015
     min: 2.926125
     status: COMPLETED
     unit: W
-    value: 3.2431218750000004
+    value: 3.243122
   duration:
     unit: hours
     value: 1000

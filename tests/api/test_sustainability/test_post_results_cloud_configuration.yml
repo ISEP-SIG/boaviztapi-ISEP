@@ -17,11 +17,11 @@ costs:
     warnings: []
   usd:
     breakdown:
-      operating_costs: 5.8487789999999995
+      operating_costs: 5.848779
     currency:
       name: United States Dollar
       symbol: USD
-    total_cost: 5.8487789999999995
+    total_cost: 5.848779
     warnings: []
 impacts:
   adp:
@@ -34,9 +34,9 @@ impacts:
       - End of life is not included in the calculation
     unit: kgSbeq
     use:
-      max: 2.57e-08
-      min: 1.927e-08
-      value: 2.14e-08
+      max: 0.0
+      min: 0.0
+      value: 0.0
   gwp:
     description: Total climate change
     embedded:
@@ -72,9 +72,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 1.763e-07
-          min: 1.763e-07
-          value: 1.763e-07
+          max: 0.0
+          min: 0.0
+          value: 0.0
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -149,12 +149,12 @@ verbose:
       value: 1
   CPU-1:
     adp_factor:
-      max: 3.29318e-08
-      min: 3.29318e-08
-      source: ADEME Base IMPACTS ®
+      max: 0.0
+      min: 0.0
+      source: ADEME Base IMPACTS Â®
       status: COMPLETED
       unit: kg Sbeq/kWh
-      value: 3.29318e-08
+      value: 0.0
     avg_power:
       max: 3.740875
       min: 3.740875
@@ -208,9 +208,9 @@ verbose:
           - End of life is not included in the calculation
         unit: kgSbeq
         use:
-          max: 1.232e-08
-          min: 1.232e-08
-          value: 1.232e-08
+          max: 0.0
+          min: 0.0
+          value: 0.0
       gwp:
         description: Total climate change
         embedded:
@@ -259,10 +259,10 @@ verbose:
       source: From TDP
       status: COMPLETED
       value:
-        a: 20.339173674705552
-        b: 0.0722167997542425
-        c: 20.451103306605262
-        d: -3.161210693447459
+        a: 20.339174
+        b: 0.072217
+        c: 20.451103
+        d: -3.161211
     pe_factor:
       max: 8.511
       min: 8.511
@@ -322,9 +322,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.0004613
-          min: 0.0004613
-          value: 0.0004613
+          max: 0.000461
+          min: 0.000461
+          value: 0.000461
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -402,12 +402,12 @@ verbose:
       value: 2.0
   RAM-1:
     adp_factor:
-      max: 3.29318e-08
-      min: 3.29318e-08
-      source: ADEME Base IMPACTS ®
+      max: 0.0
+      min: 0.0
+      source: ADEME Base IMPACTS Â®
       status: COMPLETED
       unit: kg Sbeq/kWh
-      value: 3.29318e-08
+      value: 0.0
     avg_power:
       max: 1.136
       min: 1.136
@@ -426,7 +426,7 @@ verbose:
       source: Average of 11 rows
       status: COMPLETED
       unit: GB/cm2
-      value: 1.2443636363636363
+      value: 1.244364
     duration:
       unit: hours
       value: 100
@@ -448,16 +448,16 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.0008257
-          min: 0.0005286
+          max: 0.000826
+          min: 0.000529
           value: 0.00063
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
         use:
-          max: 3.741e-09
-          min: 3.741e-09
-          value: 3.741e-09
+          max: 0.0
+          min: 0.0
+          value: 0.0
       gwp:
         description: Total climate change
         embedded:
@@ -516,18 +516,18 @@ verbose:
       unit: /1
       value: 1.0
   adp_factor:
-    max: 3.29318e-08
-    min: 3.29318e-08
-    source: ADEME Base IMPACTS ®
+    max: 0.0
+    min: 0.0
+    source: ADEME Base IMPACTS Â®
     status: COMPLETED
     unit: kg Sbeq/kWh
-    value: 3.29318e-08
+    value: 0.0
   avg_power:
-    max: 7.803000000000001
+    max: 7.803
     min: 5.85225
     status: COMPLETED
     unit: W
-    value: 6.486243750000001
+    value: 6.486244
   duration:
     unit: hours
     value: 100

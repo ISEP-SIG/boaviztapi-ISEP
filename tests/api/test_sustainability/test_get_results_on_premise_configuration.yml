@@ -1,7 +1,7 @@
 costs:
   eur:
     breakdown:
-      energy_costs: 546.6677999999999
+      energy_costs: 546.6678
       operating_costs: 30660000.0
     currency:
       name: Euro
@@ -11,7 +11,7 @@ costs:
     warnings: []
   local:
     breakdown:
-      energy_costs: 546.6677999999999
+      energy_costs: 546.6678
       operating_costs: 30660000.0
     currency:
       name: Euro
@@ -21,12 +21,12 @@ costs:
     warnings: []
   usd:
     breakdown:
-      energy_costs: 640.7493283799998
+      energy_costs: 640.749328
       operating_costs: 35936586.0
     currency:
       name: United States Dollar
       symbol: USD
-    total_cost: 35937226.74932838
+    total_cost: 35937226.749328
     unit: USD/MWh
     warnings: []
 impacts:
@@ -40,8 +40,8 @@ impacts:
       - End of life is not included in the calculation
     unit: kgSbeq
     use:
-      max: 0.0006229
-      min: 0.0003114
+      max: 0.000623
+      min: 0.000311
       value: 0.00041
   gwp:
     description: Total climate change
@@ -78,9 +78,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 1.41e-06
-          min: 1.41e-06
-          value: 1.41e-06
+          max: 1.0e-06
+          min: 1.0e-06
+          value: 1.0e-06
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -155,12 +155,12 @@ verbose:
       value: 1
   CPU-1:
     adp_factor:
-      max: 3.29318e-08
-      min: 3.29318e-08
-      source: ADEME Base IMPACTS ®
+      max: 0.0
+      min: 0.0
+      source: ADEME Base IMPACTS Â®
       status: COMPLETED
       unit: kg Sbeq/kWh
-      value: 3.29318e-08
+      value: 0.0
     avg_power:
       max: 179.564
       min: 179.564
@@ -241,10 +241,10 @@ verbose:
       source: From TDP
       status: COMPLETED
       value:
-        a: 61.01752081482055
-        b: 0.06770403722951243
-        c: 20.45110315733066
-        d: -5.546360714878164
+        a: 61.017521
+        b: 0.067704
+        c: 20.451103
+        d: -5.546361
     pe_factor:
       max: 8.511
       min: 8.511
@@ -278,7 +278,7 @@ verbose:
       unit: workload_rate:W
       value:
       - load_percentage: 0
-        power_watt: 14.399999999999999
+        power_watt: 14.4
       - load_percentage: 10
         power_watt: 38.4
       - load_percentage: 50
@@ -371,12 +371,12 @@ verbose:
       value: 2
   RAM-1:
     adp_factor:
-      max: 3.29318e-08
-      min: 3.29318e-08
-      source: ADEME Base IMPACTS ®
+      max: 0.0
+      min: 0.0
+      source: ADEME Base IMPACTS Â®
       status: COMPLETED
       unit: kg Sbeq/kWh
-      value: 3.29318e-08
+      value: 0.0
     avg_power:
       max: 36.352
       min: 36.352
@@ -393,7 +393,7 @@ verbose:
       source: Average of 3 rows
       status: COMPLETED
       unit: GB/cm2
-      value: 0.9166666666666666
+      value: 0.916667
     duration:
       unit: hours
       value: 43800
@@ -422,9 +422,9 @@ verbose:
           - End of life is not included in the calculation
         unit: kgSbeq
         use:
-          max: 5.243e-05
-          min: 5.243e-05
-          value: 5.243e-05
+          max: 5.2e-05
+          min: 5.2e-05
+          value: 5.2e-05
       gwp:
         description: Total climate change
         embedded:
@@ -548,7 +548,7 @@ verbose:
       source: Average of 7 rows
       status: COMPLETED
       unit: GB/cm2
-      value: 42.51428571428572
+      value: 42.514286
     duration:
       unit: hours
       value: 43800
@@ -590,18 +590,18 @@ verbose:
       status: INPUT
       value: 1
   adp_factor:
-    max: 3.29318e-08
-    min: 3.29318e-08
-    source: ADEME Base IMPACTS ®
+    max: 0.0
+    min: 0.0
+    source: ADEME Base IMPACTS Â®
     status: COMPLETED
     unit: kg Sbeq/kWh
-    value: 3.29318e-08
+    value: 0.0
   avg_power:
     max: 431.832
     min: 215.916
     status: COMPLETED
     unit: W
-    value: 287.16828000000004
+    value: 287.16828
   duration:
     unit: hours
     value: 43800
