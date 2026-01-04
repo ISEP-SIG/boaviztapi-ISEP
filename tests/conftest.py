@@ -1,5 +1,5 @@
-import pytest
 import logging
+from unittest.mock import MagicMock, AsyncMock
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -11,7 +11,7 @@ class DummyCtx:
         self.GOOGLE_CLIENT_ID = "DUMMY"
         self.GOOGLE_CLIENT_SECRET = "DUMMY"
         self.SESSION_MIDDLEWARE_SECRET_KEY = "DUMMY"
-        self.mongodb_client = None
+        self.mongodb_client = AsyncMock()
         self.database_name = "testdb"
 
     def load_secrets(self):
