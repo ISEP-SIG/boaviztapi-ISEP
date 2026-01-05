@@ -1,6 +1,7 @@
 import glob
 import os
 import pandas as pd
+import logging
 from datetime import datetime
 
 from boaviztapi.model.crud_models.configuration_model import CloudConfigurationModel, OnPremiseConfigurationModel, \
@@ -8,10 +9,16 @@ from boaviztapi.model.crud_models.configuration_model import CloudConfigurationM
 
 from boaviztapi.service.utils_provider import data_dir
 
+# Initialise logger
+log = logging.getLogger(__name__)
+
 # Data directory
 cloud_dir = os.path.join(data_dir, 'archetypes/cloud')
 all_files = glob.glob(os.path.join(cloud_dir, '*.csv'))
-all_files.remove(os.path.join(cloud_dir, 'providers.csv'))
+try:
+    all_files.remove(os.path.join(cloud_dir, 'providers.csv'))
+except ValueError:
+    pass
 
 # Dataframe of all the cloud configurations in the archetype folder
 df_list = []
@@ -60,24 +67,35 @@ def strategy_lift_shift(input_config: OnPremiseConfigurationModel, provider_name
     # Gather filter parameters
     input_vcpus = input_config.cpu_core_units * input_config.cpu_quantity
     input_ram = input_config.ram_capacity * input_config.ram_quantity
-    input_storage = input_config.ssd_capacity * (input_config.ssd_quantity + input_config.hdd_quantity)
+
+    # Limit the filter parameters to the maximum values available in the cloud archetypes
+    provider_configs = all_cloud_configs[all_cloud_configs['provider.name'] == provider_name]
+    if input_vcpus > provider_configs['vcpu'].max():
+        log.warning(f"input_vcpus[{input_vcpus}] > provider_configs['vcpu'].max()[{provider_configs['vcpu'].max()}]."
+                    f"Given on-premise virtual CPU cores requirements exceed the biggest vcpu size available at {provider_name}. "
+                    f"Limiting input_vcpus to the maximum provided by the cloud provider!")
+        input_vcpus = min(input_vcpus, provider_configs['vcpu'].max())
+    if input_ram > provider_configs['memory'].max():
+        log.warning(f"input_ram[{input_ram}] > provider_configs['memory'].max()[{provider_configs['memory'].max()}]. "
+                    f"Given on-premise memory requirements exceed the biggest memory size available at {provider_name}. "
+                    f"Limiting input_ram to the maximum provided by the cloud provider!")
+        input_ram = min(input_ram, provider_configs['memory'].max())
 
     # Make a filter mask for the dataframe
     mask = (
             (all_cloud_configs['provider.name'] == provider_name) &
             (all_cloud_configs['vcpu'] >= input_vcpus) &
-            (all_cloud_configs['memory'] >= input_ram) &
-            (all_cloud_configs['ssd_storage'] >= input_storage)
+            (all_cloud_configs['memory'] >= input_ram)
     )
     # Filter the dataframe with the mask
     filtered_configs = all_cloud_configs[mask].copy()
     # Sort the filtered dataframe by vcpu, memory and ssd_storage
     filtered_configs = filtered_configs.sort_values(
-        by=['vcpu', 'memory', 'ssd_storage'],
-        ascending=[True, True, True]
+        by=['vcpu', 'memory'],
+        ascending=[True, True]
     )
     if len(filtered_configs) == 0:
-        raise ValueError(f"No cloud configuration found for provider {provider_name}")
+        raise ValueError(f"No cloud configuration found for provider {provider_name} that fits the given requirements!")
     best_config = filtered_configs.iloc[0].to_dict()
     return _cloud_instance_to_cloud_config(input_config, best_config)
 
