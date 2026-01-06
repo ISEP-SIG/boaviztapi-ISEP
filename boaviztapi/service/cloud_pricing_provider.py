@@ -3,43 +3,7 @@ import os.path
 import pandas as pd
 
 from boaviztapi import data_dir
-
-
-class CloudPriceProvider:
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
-
-    def __init__(self):
-        self.aws_provider = AWSPriceProvider()
-        self.azure_provider = AzurePriceProvider()
-        self.gcp_provider = GcpPriceProvider()
-        self.valid_providers = ['aws', 'azure', 'gcp']
-
-    def get_all(self, provider: str, region: str, instance_id: str):
-        provider = provider.lower().strip()
-        if provider == 'aws':
-            return self.aws_provider.get_all(region, instance_id)
-        elif provider == 'azure':
-            return self.azure_provider.get_all(region, instance_id)
-        elif provider == 'gcp':
-            return self.gcp_provider.get_all(region, instance_id)
-        else
-            raise ValueError(f"Provider {provider} is not a valid cloud provider! Valid providers are {self.valid_providers}")
-
-    def get_prices_with_saving(self, provider: str, region:str, savings_type: str, instance_id: str):
-        provider = provider.lower().strip()
-        if provider == 'aws':
-            return self.aws_provider.get_prices_with_saving(region, savings_type, instance_id)
-        elif provider == 'azure':
-            return self.azure_provider.get_prices_with_saving(region, savings_type, instance_id)
-        elif provider == 'gcp':
-            raise ValueError(f"Provider {provider} does not support savings!")
-        else:
-            raise ValueError(f"Provider {provider} is not a valid cloud provider! Valid providers are {self.valid_providers}")
+from boaviztapi.model.cloud_prices.cloud_prices import AzurePriceModel, GcpPriceModel, AWSPriceModel
 
 class AWSPriceProvider:
     _instance = None
@@ -57,28 +21,42 @@ class AWSPriceProvider:
         self.savings_types = self.aws_prices.index.get_level_values('saving').unique().tolist()
         self.instance_ids = self.aws_prices.index.get_level_values('id').unique().tolist()
 
-    def get_all(self, region: str, instance_id: str) -> pd.DataFrame:
+    def _df_to_pydantic(self, df: pd.DataFrame, region: str, instance_id: str, saving: str | None = None) -> list[AWSPriceModel]:
+        result = []
+        for item in df.to_dict(orient='records'):
+            item['region'] = region
+            item['id'] = instance_id
+            if saving:
+                item['saving'] = saving
+                result.append(AWSPriceModel.model_validate(item))
+                return result
+            # No saving specified, use all of them
+            for saving in self.savings_types:
+                item['saving'] = saving
+                result.append(AWSPriceModel.model_validate(item))
+        return result
+
+    def get_all(self, region: str, instance_id: str) -> list[AWSPriceModel]:
         region = region.lower().strip()
         instance_id = instance_id.lower().strip()
         if region not in self.regions:
             raise ValueError(f"Region {region} is not a valid AWS region!")
         if instance_id not in self.instance_ids:
             raise ValueError(f"Instance {instance_id} is not a valid AWS instance!")
-        return self.aws_prices.xs((region, instance_id), level=('region', 'id'))
+        return self._df_to_pydantic(df=self.aws_prices.xs((region, instance_id), level=('region', 'id')), region=region, instance_id=instance_id)
 
 
-    def get_prices_with_saving(self, region:str, savings_type: str, instance_id: str):
+    def get_prices_with_saving(self, region:str, savings_type: str, instance_id: str) -> list[AWSPriceModel]:
         region = region.lower().strip()
         savings_type = savings_type.strip()
         instance_id = instance_id.lower().strip()
         if region not in self.regions:
             raise ValueError(f"Region {region} is not a valid AWS region!")
-        if savings_type not in self.regions:
+        if savings_type not in self.savings_types:
             raise ValueError(f"Savings type {savings_type} is not a valid AWS savings type! Check for case-sensitivity!")
         if instance_id not in self.instance_ids:
             raise ValueError(f"Instance {instance_id} is not a valid AWS instance!")
-        return self.aws_prices.xs((region, savings_type, instance_id), level=('region', 'saving', 'id'))
-
+        return self._df_to_pydantic(df=self.aws_prices.xs((region, savings_type, instance_id), level=('region', 'saving', 'id')), region=region, saving=savings_type, instance_id=instance_id)
 
 class AzurePriceProvider:
     _instance = None
@@ -96,27 +74,44 @@ class AzurePriceProvider:
         self.savings_types = self.azure_prices.index.get_level_values('saving').unique().tolist()
         self.instance_ids = self.azure_prices.index.get_level_values('id').unique().tolist()
 
-    def get_all(self, region: str, instance_id: str):
+    def _df_to_pydantic(self, df: pd.DataFrame, region: str, instance_id: str, saving: str | None = None) -> list[
+        AzurePriceModel]:
+        result = []
+        for item in df.to_dict(orient='records'):
+            item['region'] = region
+            item['id'] = instance_id
+            if saving:
+                item['saving'] = saving
+                result.append(AzurePriceModel.model_validate(item))
+                return result
+            # No saving specified, use all of them
+            for saving in self.savings_types:
+                item['saving'] = saving
+                result.append(AzurePriceModel.model_validate(item))
+        return result
+
+    def get_all(self, region: str, instance_id: str) -> list[AzurePriceModel]:
         region = region.lower().strip()
         instance_id = instance_id.lower().strip()
         if region not in self.regions:
             raise ValueError(f"Region {region} is not a valid Azure region!")
         if instance_id not in self.instance_ids:
             raise ValueError(f"Instance {instance_id} is not a valid Azure instance!")
-        return self.azure_prices.xs((region, instance_id), level=('region', 'id'))
+        return self._df_to_pydantic(df=self.azure_prices.xs((region, instance_id), level=('region', 'id')), region=region, instance_id=instance_id)
 
-    def get_prices_with_saving(self, region: str, instance_id: str, savings_type: str):
+    def get_prices_with_saving(self, region: str, instance_id: str, savings_type: str) -> list[AzurePriceModel]:
         region = region.lower().strip()
         savings_type = savings_type.strip()
         instance_id = instance_id.lower().strip()
         if region not in self.regions:
             raise ValueError(f"Region {region} is not a valid Azure region!")
-        if savings_type not in self.regions:
+        if savings_type not in self.savings_types:
             raise ValueError(
                 f"Savings type {savings_type} is not a valid Azure savings type! Check for case-sensitivity!")
         if instance_id not in self.instance_ids:
             raise ValueError(f"Instance {instance_id} is not a valid Azure instance!")
-        return self.azure_prices.xs((region, savings_type, instance_id), level=('region', 'saving', 'id'))
+        return self._df_to_pydantic(df=self.azure_prices.xs((region, savings_type, instance_id), level=('region', 'saving', 'id')), region=region, saving=savings_type, instance_id=instance_id)
+
 
 class GcpPriceProvider:
     _instance = None
@@ -133,12 +128,26 @@ class GcpPriceProvider:
         self.regions = self.gcp_prices.index.get_level_values('region').unique().tolist()
         self.instance_ids = self.gcp_prices.index.get_level_values('id').unique().tolist()
 
-    def get_all(self, region: str, instance_id: str):
+    @staticmethod
+    def _df_to_pydantic(df: pd.DataFrame, region: str, instance_id: str) -> GcpPriceModel:
+        result = []
+        for item in df.to_dict(orient='records'):
+            item['region'] = region
+            item['id'] = instance_id
+            result.append(GcpPriceModel.model_validate(item))
+        if len(result) == 0:
+            raise ValueError("The returned dictionary from the get_all GCP provider is empty!")
+        return result[0]
+
+
+    def get_all(self, region: str, instance_id: str) -> GcpPriceModel:
         region = region.lower().strip()
         instance_id = instance_id.lower().strip()
         if region not in self.regions:
             raise ValueError(f"Region {region} is not a valid GCP region!")
         if instance_id not in self.instance_ids:
             raise ValueError(f"Instance {instance_id} is not a valid GCP instance!")
-        return self.gcp_prices.xs((region, instance_id), level=('region', 'id'))
+        return self._df_to_pydantic(self.gcp_prices.xs((region, instance_id), level=('region', 'id')), region, instance_id)
+
+
 
