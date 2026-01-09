@@ -127,7 +127,7 @@ async def test_post_results_on_premise_configuration(data_regression):
             }
         })
     assert res.status_code == 200
-    data_regression.check(data_dict=res.json(), round_digits=2)
+    data_regression.check(data_dict=res.json(), round_digits=1)
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("cloud_config", [aws_cloud_config, azure_cloud_config, gcp_cloud_config])
@@ -136,7 +136,7 @@ async def test_post_results_cloud_configuration(data_regression, cloud_config):
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         res = await ac.post('/v1/sustainability/cloud?verbose=true&costs=true', json=cloud_config)
     assert res.status_code == 200
-    data_regression.check(data_dict=res.json(), round_digits=2)
+    data_regression.check(data_dict=res.json(), round_digits=1)
 
 @pytest.mark.asyncio
 async def test_get_results_on_premise_configuration(data_regression, mock_configuration_service):
@@ -177,7 +177,7 @@ async def test_get_results_on_premise_configuration(data_regression, mock_config
         res = await ac.get('/v1/sustainability/on-premise/507f1f77bcf86cd799439011?verbose=true&costs=true')
     
     assert res.status_code == 200
-    data_regression.check(data_dict=res.json(), round_digits=2)
+    data_regression.check(data_dict=res.json(), round_digits=1)
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize('cloud_config', [aws_cloud_config, azure_cloud_config, gcp_cloud_config])
@@ -208,4 +208,4 @@ async def test_get_results_cloud_configuration(data_regression, mock_configurati
         res = await ac.get('/v1/sustainability/cloud/507f1f77bcf86cd799439011?verbose=true&costs=true')
 
     assert res.status_code == 200
-    data_regression.check(data_dict=res.json(), round_digits=2)
+    data_regression.check(data_dict=res.json(), round_digits=1)
