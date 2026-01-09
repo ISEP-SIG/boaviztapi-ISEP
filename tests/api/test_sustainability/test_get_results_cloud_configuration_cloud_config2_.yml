@@ -27,9 +27,9 @@ impacts:
   adp:
     description: Use of minerals and fossil ressources
     embedded:
-      max: 1.05
-      min: 0.55
-      value: 0.77
+      max: 0.58
+      min: 0.3
+      value: 0.42
       warnings:
       - End of life is not included in the calculation
     unit: kgSbeq
@@ -40,29 +40,29 @@ impacts:
   gwp:
     description: Total climate change
     embedded:
-      max: 6184.0
-      min: 2641.0
-      value: 4300.0
+      max: 4306.0
+      min: 1539.0
+      value: 2700.0
       warnings:
       - End of life is not included in the calculation
     unit: kgCO2eq
     use:
-      max: 242.0
-      min: 181.5
-      value: 201.0
+      max: 70.65
+      min: 52.99
+      value: 59.0
   pe:
     description: Consumption of primary energy
     embedded:
-      max: 83010.0
-      min: 35570.0
-      value: 58000.0
+      max: 56470.0
+      min: 20390.0
+      value: 36000.0
       warnings:
       - End of life is not included in the calculation
     unit: MJ
     use:
-      max: 4576.0
-      min: 3432.0
-      value: 3800.0
+      max: 1336.0
+      min: 1002.0
+      value: 1110.0
 verbose:
   ASSEMBLY-1:
     duration:
@@ -82,9 +82,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 40.08
-          min: 40.08
-          value: 40.08
+          max: 20.04
+          min: 20.04
+          value: 20.04
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -92,9 +92,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 411.6
-          min: 411.6
-          value: 411.6
+          max: 205.8
+          min: 205.8
+          value: 205.8
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -115,9 +115,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.17
-          min: 0.12
-          value: 0.12
+          max: 0.08
+          min: 0.06
+          value: 0.06
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -125,9 +125,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 900.0
-          min: 515.4
-          value: 900.0
+          max: 450.0
+          min: 257.7
+          value: 450.0
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -135,9 +135,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 13200.0
-          min: 7373.0
-          value: 13200.0
+          max: 6600.0
+          min: 3686.0
+          value: 6600.0
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -156,34 +156,34 @@ verbose:
       unit: kg Sbeq/kWh
       value: 0.0
     avg_power:
-      max: 3142.32
-      min: 3142.32
+      max: 763.14
+      min: 763.14
       status: COMPLETED
       unit: W
-      value: 3142.32
+      value: 763.14
     core_units:
-      max: 48
-      min: 48
-      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/xeon-platinum-8468.c3094.
+      max: 16
+      min: 16
+      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/epyc-7281.c1927.
       status: COMPLETED
-      value: 48
+      value: 16
     die_size:
-      max: 1908
-      min: 1908
-      source: 'io_die_size () + die_size (4x 477 mm²) : Completed from name name based
-        on https://www.techpowerup.com/cpu-specs/xeon-platinum-8468.c3094.'
+      max: 213
+      min: 213
+      source: 'io_die_size () + die_size (213 mm²) : Completed from name name based
+        on https://www.techpowerup.com/cpu-specs/epyc-7281.c1927.'
       status: COMPLETED
       unit: mm2
-      value: 1908
+      value: 213
     duration:
       unit: hours
       value: 100
     family:
-      max: Sapphire Rapids
-      min: Sapphire Rapids
-      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/xeon-platinum-8468.c3094.
+      max: Naples
+      min: Naples
+      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/epyc-7281.c1927.
       status: COMPLETED
-      value: Sapphire Rapids
+      value: Naples
     gwp_factor:
       max: 0.45
       min: 0.45
@@ -202,9 +202,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.24
-          min: 0.24
-          value: 0.24
+          max: 0.12
+          min: 0.12
+          value: 0.12
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -215,55 +215,55 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 560.7
-          min: 560.7
-          value: 560.7
+          max: 80.02
+          min: 80.02
+          value: 80.02
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
         use:
-          max: 141.4
-          min: 141.4
-          value: 141.4
+          max: 34.34
+          min: 34.34
+          value: 34.34
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 7939.0
-          min: 7939.0
-          value: 7939.0
+          max: 1275.0
+          min: 1275.0
+          value: 1275.0
           warnings:
           - End of life is not included in the calculation
         unit: MJ
         use:
-          max: 2674.0
-          min: 2674.0
-          value: 2674.0
+          max: 649.5
+          min: 649.5
+          value: 649.5
     manufacturer:
-      max: Intel
-      min: Intel
-      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/xeon-platinum-8468.c3094.
+      max: AMD
+      min: AMD
+      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/epyc-7281.c1927.
       status: COMPLETED
-      value: Intel
+      value: AMD
     model_range:
-      max: Xeon Platinum
-      min: Xeon Platinum
-      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/xeon-platinum-8468.c3094.
+      max: EPYC
+      min: EPYC
+      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/epyc-7281.c1927.
       status: COMPLETED
-      value: Xeon Platinum
+      value: EPYC
     name:
-      max: Intel Xeon Platinum 8468
-      min: Intel Xeon Platinum 8468
+      max: AMD EPYC 7281
+      min: AMD EPYC 7281
       source: fuzzy match
       status: COMPLETED
-      value: Intel Xeon Platinum 8468
+      value: AMD EPYC 7281
     params:
       source: From TDP
       status: COMPLETED
       value:
-        a: 177.97
+        a: 86.44
         b: 0.06
         c: 20.45
-        d: -3.78
+        d: -4.12
     pe_factor:
       max: 8.51
       min: 8.51
@@ -272,15 +272,18 @@ verbose:
       unit: MJ/kWh
       value: 8.51
     tdp:
-      max: 350
-      min: 350
-      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/xeon-platinum-8468.c3094.
+      max: 170
+      min: 170
+      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/epyc-7281.c1927.
       status: COMPLETED
       unit: W
-      value: 350
+      value: 170
     threads:
-      status: ARCHETYPE
-      value: 16.0
+      max: 32
+      min: 32
+      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/epyc-7281.c1927.
+      status: COMPLETED
+      value: 32
     time_workload:
       max: 100.0
       min: 0.0
@@ -305,13 +308,13 @@ verbose:
       unit: workload_rate:W
       value:
       - load_percentage: 0
-        power_watt: 42.0
+        power_watt: 20.4
       - load_percentage: 10
-        power_watt: 112.0
+        power_watt: 54.4
       - load_percentage: 50
-        power_watt: 262.5
+        power_watt: 127.5
       - load_percentage: 100
-        power_watt: 357.0
+        power_watt: 173.4
   MOTHERBOARD-1:
     duration:
       unit: hours
@@ -320,9 +323,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.02
-          min: 0.02
-          value: 0.02
+          max: 0.01
+          min: 0.01
+          value: 0.01
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -330,9 +333,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 396.6
-          min: 396.6
-          value: 396.6
+          max: 198.3
+          min: 198.3
+          value: 198.3
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -340,9 +343,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 5016.0
-          min: 5016.0
-          value: 5016.0
+          max: 2508.0
+          min: 2508.0
+          value: 2508.0
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -360,9 +363,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.5
-          min: 0.1
-          value: 0.3
+          max: 0.25
+          min: 0.05
+          value: 0.15
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -370,9 +373,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 1458.0
-          min: 291.6
-          value: 900.0
+          max: 729.0
+          min: 145.8
+          value: 440.0
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -380,9 +383,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 21120.0
-          min: 4224.0
-          value: 13000.0
+          max: 10560.0
+          min: 2112.0
+          value: 6300.0
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -521,11 +524,11 @@ verbose:
     unit: kg Sbeq/kWh
     value: 0.0
   avg_power:
-    max: 5376.69
-    min: 4032.52
+    max: 1570.0
+    min: 1177.5
     status: COMPLETED
     unit: W
-    value: 4469.37
+    value: 1305.07
   duration:
     unit: hours
     value: 100
