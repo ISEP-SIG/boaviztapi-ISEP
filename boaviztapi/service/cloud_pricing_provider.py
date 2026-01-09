@@ -21,14 +21,14 @@ def _estimate_cloud_region(localisation: str, provider: str) -> str:
     Returns:
         Nearest cloud provider region to the provided Electricity Maps zone code
     """
-    localisation = localisation.lower().strip()
+    localisation = localisation.upper().strip()
     provider = provider.lower().strip()
     if localisation not in cloud_region_map['zone_code'].unique():
         raise ValueError(f"Given localisation {localisation} is not mapped to any cloud region of provider {provider}!")
     if provider not in cloud_region_map['provider'].unique():
         raise ValueError(f"Given provider {provider} is not recognised!")
     region = cloud_region_map[(cloud_region_map['zone_code'] == localisation)
-                              and (cloud_region_map['provider'] == provider)]['region'].values[0]
+                              & (cloud_region_map['provider'] == provider)]['region'].values[0]
     if not region:
         raise ValueError(f"No cloud region found for localisation {localisation} and provider {provider}!")
     return region
@@ -103,6 +103,16 @@ class AzurePriceProvider:
         self.savings_types = self.azure_prices.index.get_level_values('saving').unique().tolist()
         self.instance_ids = self.azure_prices.index.get_level_values('id').unique().tolist()
 
+    @classmethod
+    def _normalise_instance_id(cls, instance_id: str):
+        """
+        Normalise archetype instance_id to match the pricing map instance_ids
+        e.g. "standard_d32ds_v4" -> "d32dsv4"
+        """
+        instance_id = instance_id.replace('standard', '')
+        instance_id = instance_id.replace('_', '')
+        return instance_id.lower().strip()
+
     def _df_to_pydantic(self, df: pd.DataFrame, region: str, instance_id: str, saving: str | None = None) -> list[
         AzurePriceModel]:
         result = []
@@ -121,7 +131,7 @@ class AzurePriceProvider:
 
     def get_all(self, region: str, instance_id: str) -> list[AzurePriceModel]:
         region = region.lower().strip()
-        instance_id = instance_id.lower().strip()
+        instance_id = self._normalise_instance_id(instance_id)
         if region not in self.regions:
             raise ValueError(f"Region {region} is not a valid Azure region!")
         if instance_id not in self.instance_ids:
@@ -131,7 +141,7 @@ class AzurePriceProvider:
     def get_prices_with_saving(self, region: str, instance_id: str, savings_type: str) -> list[AzurePriceModel]:
         region = region.lower().strip()
         savings_type = savings_type.strip()
-        instance_id = instance_id.lower().strip()
+        instance_id = self._normalise_instance_id(instance_id)
         if region not in self.regions:
             raise ValueError(f"Region {region} is not a valid Azure region!")
         if savings_type not in self.savings_types:

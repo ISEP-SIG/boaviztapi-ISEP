@@ -159,12 +159,12 @@ class CostCalculator:
         elif 'aws' == server.cloud_provider.lower():
             price_provider = AWSPriceProvider()
             cloud_region = _estimate_cloud_region(usage.localisation, server.cloud_provider)
-            hourly_costs: list[AWSPriceModel] = price_provider.get_prices_with_saving(region=cloud_region, instance_id=server.instance_type, savings_type=usage.instancePricingType)
+            hourly_costs: list[AWSPriceModel] = price_provider.get_prices_with_saving(region=cloud_region, instance_id=server.instance_type, savings_type=usage.reservedPlan)
             hourly_cost = hourly_costs[0].linux_spot_min_cost
         elif 'azure' == server.cloud_provider.lower():
             price_provider = AzurePriceProvider()
             cloud_region = _estimate_cloud_region(usage.localisation, server.cloud_provider)
-            hourly_costs: list[AzurePriceModel] = price_provider.get_prices_with_saving(region=cloud_region, instance_id=server.instance_type, savings_type=usage.instancePricingType)
+            hourly_costs: list[AzurePriceModel] = price_provider.get_prices_with_saving(region=cloud_region, instance_id=server.instance_type, savings_type=usage.reservedPlan)
             hourly_cost = hourly_costs[0].linux_spot_min_cost
         else:
             raise ValueError(f"Unknown cloud provider: {server.cloud_provider}")
