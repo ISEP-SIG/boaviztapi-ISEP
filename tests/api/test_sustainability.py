@@ -19,6 +19,57 @@ mock_user = UserPublicDTO(
     picture="http://example.com/pic.jpg"
 )
 
+aws_cloud_config = {
+            "type": "cloud",
+            "name": "Development Cloud",
+            "created": "2023-01-01T00:00:00.000Z",
+            "cloud_provider": "aws",
+            "instance_type": "a1.large",
+            "user_id": "1234567890",
+            "usage": {
+                "localisation": "NL",
+                "lifespan": 100,
+                "method": "Load",
+                "serverLoad": 100,
+                "instancePricingType": "OnDemand",
+                "reservedPlan": "yrTerm1Standard.noUpfront"
+            }
+        }
+
+azure_cloud_config = {
+            "type": "cloud",
+            "name": "Development Cloud",
+            "created": "2023-01-01T00:00:00.000Z",
+            "cloud_provider": "azure",
+            "instance_type": "e2ads_v5",
+            "user_id": "1234567890",
+            "usage": {
+                "localisation": "NL",
+                "lifespan": 100,
+                "method": "Load",
+                "serverLoad": 100,
+                "instancePricingType": "OnDemand",
+                "reservedPlan": "yrTerm1Savings.allUpfront"
+            }
+        }
+
+gcp_cloud_config = {
+            "type": "cloud",
+            "name": "Development Cloud",
+            "created": "2023-01-01T00:00:00.000Z",
+            "cloud_provider": "gcp",
+            "instance_type": "c3-standard-192-metal",
+            "user_id": "1234567890",
+            "usage": {
+                "localisation": "NL",
+                "lifespan": 100,
+                "method": "Load",
+                "serverLoad": 100,
+                "instancePricingType": "OnDemand",
+                "reservedPlan": None
+            }
+        }
+
 async def override_get_current_user():
     return mock_user
 
@@ -79,25 +130,11 @@ async def test_post_results_on_premise_configuration(data_regression):
     data_regression.check(data_dict=res.json(), round_digits=2)
 
 @pytest.mark.asyncio
-async def test_post_results_cloud_configuration(data_regression):
+@pytest.mark.parametrize("cloud_config", [aws_cloud_config, azure_cloud_config, gcp_cloud_config])
+async def test_post_results_cloud_configuration(data_regression, cloud_config):
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        res = await ac.post('/v1/sustainability/cloud?verbose=true&costs=true', json={
-            "type": "cloud",
-            "name": "Development Cloud",
-            "created": "2023-01-01T00:00:00.000Z",
-            "cloud_provider": "aws",
-            "instance_type": "a1.large",
-            "user_id": "1234567890",
-            "usage": {
-                "localisation": "NL",
-                "lifespan": 100,
-                "method": "Load",
-                "serverLoad": 100,
-                "instancePricingType": "OnDemand",
-                "reservedPlan": "1y"
-            }
-        })
+        res = await ac.post('/v1/sustainability/cloud?verbose=true&costs=true', json=cloud_config)
     assert res.status_code == 200
     data_regression.check(data_dict=res.json(), round_digits=2)
 
@@ -143,24 +180,26 @@ async def test_get_results_on_premise_configuration(data_regression, mock_config
     data_regression.check(data_dict=res.json(), round_digits=2)
 
 @pytest.mark.asyncio
-async def test_get_results_cloud_configuration(data_regression, mock_configuration_service):
+@pytest.mark.parametrize('cloud_config', [aws_cloud_config, azure_cloud_config, gcp_cloud_config])
+async def test_get_results_cloud_configuration(data_regression, mock_configuration_service, cloud_config):
     # Setup mock return value
-    mock_cloud = CloudConfigurationModel(
-        type="cloud",
-        name="Development Cloud",
-        created="2023-01-01T00:00:00.000Z",
-        cloud_provider="AWS",
-        instance_type="a1.medium",
-        user_id="1234567890",
-        usage={
-            "localisation": "NL",
-            "lifespan": 1000,
-            "method": "Load",
-            "serverLoad": 100,
-            "instancePricingType": "OnDemand",
-            "reservedPlan": "1y"
-        }
-    )
+    mock_cloud = CloudConfigurationModel.model_validate(cloud_config)
+    # mock_cloud = CloudConfigurationModel(
+    #     type="cloud",
+    #     name="Development Cloud",
+    #     created="2023-01-01T00:00:00.000Z",
+    #     cloud_provider="AWS",
+    #     instance_type="a1.medium",
+    #     user_id="1234567890",
+    #     usage={
+    #         "localisation": "NL",
+    #         "lifespan": 1000,
+    #         "method": "Load",
+    #         "serverLoad": 100,
+    #         "instancePricingType": "OnDemand",
+    #         "reservedPlan": "yrTerm1Standard.noUpfront"
+    #     }
+    # )
     mock_configuration_service.get_by_id = AsyncMock(return_value= mock_cloud)
 
     transport = ASGITransport(app=app)

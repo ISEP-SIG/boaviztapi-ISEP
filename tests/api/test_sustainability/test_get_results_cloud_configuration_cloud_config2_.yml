@@ -1,41 +1,35 @@
 costs:
   eur:
     breakdown:
-      energy_costs: 0.06
-      operating_costs: 3500.0
+      operating_costs: 312.36
     currency:
       name: Euro
       symbol: EUR
-    total_cost: 3500.06
-    unit: EUR/MWh
+    total_cost: 312.36
     warnings: []
   local:
     breakdown:
-      energy_costs: 0.06
-      operating_costs: 3500.0
+      operating_costs: 312.36
     currency:
       name: Euro
       symbol: EUR
-    total_cost: 3500.06
-    unit: EUR/MWh
+    total_cost: 312.36
     warnings: []
   usd:
     breakdown:
-      energy_costs: 0.07
-      operating_costs: 4102.35
+      operating_costs: 366.12
     currency:
       name: United States Dollar
       symbol: USD
-    total_cost: 4102.42
-    unit: USD/MWh
+    total_cost: 366.12
     warnings: []
 impacts:
   adp:
     description: Use of minerals and fossil ressources
     embedded:
-      max: 0.45
-      min: 0.15
-      value: 0.16
+      max: 1.05
+      min: 0.55
+      value: 0.77
       warnings:
       - End of life is not included in the calculation
     unit: kgSbeq
@@ -46,34 +40,34 @@ impacts:
   gwp:
     description: Total climate change
     embedded:
-      max: 10610.0
-      min: 2011.0
-      value: 1400.0
+      max: 6184.0
+      min: 2641.0
+      value: 4300.0
       warnings:
       - End of life is not included in the calculation
     unit: kgCO2eq
     use:
-      max: 0.65
-      min: 0.32
-      value: 0.43
+      max: 242.0
+      min: 181.5
+      value: 201.0
   pe:
     description: Consumption of primary energy
     embedded:
-      max: 132700.0
-      min: 25590.0
-      value: 20000.0
+      max: 83010.0
+      min: 35570.0
+      value: 58000.0
       warnings:
       - End of life is not included in the calculation
     unit: MJ
     use:
-      max: 12.28
-      min: 6.14
-      value: 8.2
+      max: 4576.0
+      min: 3432.0
+      value: 3800.0
 verbose:
   ASSEMBLY-1:
     duration:
       unit: hours
-      value: 5
+      value: 100
     impacts:
       adp:
         description: Use of minerals and fossil ressources
@@ -88,9 +82,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 6.68
-          min: 6.68
-          value: 6.68
+          max: 40.08
+          min: 40.08
+          value: 40.08
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -98,9 +92,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 68.6
-          min: 68.6
-          value: 68.6
+          max: 411.6
+          min: 411.6
+          value: 411.6
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -112,18 +106,18 @@ verbose:
       value: 1
   CASE-1:
     case_type:
-      status: INPUT
+      status: ARCHETYPE
       value: rack
     duration:
       unit: hours
-      value: 5
+      value: 100
     impacts:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.02
-          min: 0.02
-          value: 0.02
+          max: 0.17
+          min: 0.12
+          value: 0.12
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -131,9 +125,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 150.0
-          min: 150.0
-          value: 150.0
+          max: 900.0
+          min: 515.4
+          value: 900.0
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -141,9 +135,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 2200.0
-          min: 2200.0
-          value: 2200.0
+          max: 13200.0
+          min: 7373.0
+          value: 13200.0
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -162,27 +156,34 @@ verbose:
       unit: kg Sbeq/kWh
       value: 0.0
     avg_power:
-      max: 179.56
-      min: 179.56
+      max: 3142.32
+      min: 3142.32
       status: COMPLETED
       unit: W
-      value: 179.56
+      value: 3142.32
     core_units:
-      status: INPUT
-      value: 24
+      max: 48
+      min: 48
+      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/xeon-platinum-8468.c3094.
+      status: COMPLETED
+      value: 48
     die_size:
-      max: 1910.0
-      min: 74.0
-      source: Average value of all families with 24 cores
+      max: 1908
+      min: 1908
+      source: 'io_die_size () + die_size (4x 477 mm²) : Completed from name name based
+        on https://www.techpowerup.com/cpu-specs/xeon-platinum-8468.c3094.'
       status: COMPLETED
       unit: mm2
-      value: 485.0
+      value: 1908
     duration:
       unit: hours
-      value: 5
+      value: 100
     family:
-      status: INPUT
-      value: Intel Xeon
+      max: Sapphire Rapids
+      min: Sapphire Rapids
+      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/xeon-platinum-8468.c3094.
+      status: COMPLETED
+      value: Sapphire Rapids
     gwp_factor:
       max: 0.45
       min: 0.45
@@ -191,19 +192,19 @@ verbose:
       unit: kg CO2eq/kWh
       value: 0.45
     hours_life_time:
-      max: 5
-      min: 5
+      max: 100
+      min: 100
       source: from device
       status: COMPLETED
       unit: hours
-      value: 5
+      value: 100
     impacts:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.04
-          min: 0.04
-          value: 0.04
+          max: 0.24
+          min: 0.24
+          value: 0.24
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -214,37 +215,55 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 93.53
-          min: 21.2
-          value: 37.0
+          max: 560.7
+          min: 560.7
+          value: 560.7
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
         use:
-          max: 0.2
-          min: 0.2
-          value: 0.2
+          max: 141.4
+          min: 141.4
+          value: 141.4
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 1324.0
-          min: 351.2
-          value: 570.0
+          max: 7939.0
+          min: 7939.0
+          value: 7939.0
           warnings:
           - End of life is not included in the calculation
         unit: MJ
         use:
-          max: 3.82
-          min: 3.82
-          value: 3.82
+          max: 2674.0
+          min: 2674.0
+          value: 2674.0
+    manufacturer:
+      max: Intel
+      min: Intel
+      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/xeon-platinum-8468.c3094.
+      status: COMPLETED
+      value: Intel
+    model_range:
+      max: Xeon Platinum
+      min: Xeon Platinum
+      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/xeon-platinum-8468.c3094.
+      status: COMPLETED
+      value: Xeon Platinum
+    name:
+      max: Intel Xeon Platinum 8468
+      min: Intel Xeon Platinum 8468
+      source: fuzzy match
+      status: COMPLETED
+      value: Intel Xeon Platinum 8468
     params:
       source: From TDP
       status: COMPLETED
       value:
-        a: 61.02
-        b: 0.07
+        a: 177.97
+        b: 0.06
         c: 20.45
-        d: -5.55
+        d: -3.78
     pe_factor:
       max: 8.51
       min: 8.51
@@ -253,9 +272,15 @@ verbose:
       unit: MJ/kWh
       value: 8.51
     tdp:
-      status: INPUT
+      max: 350
+      min: 350
+      source: Completed from name name based on https://www.techpowerup.com/cpu-specs/xeon-platinum-8468.c3094.
+      status: COMPLETED
       unit: W
-      value: 120
+      value: 350
+    threads:
+      status: ARCHETYPE
+      value: 16.0
     time_workload:
       max: 100.0
       min: 0.0
@@ -263,8 +288,10 @@ verbose:
       unit: '%'
       value: 50.0
     units:
-      status: INPUT
-      value: 2
+      max: 2.0
+      min: 2.0
+      status: ARCHETYPE
+      value: 2.0
     usage_location:
       status: INPUT
       unit: CodSP3 - NCS Country Codes - NATO
@@ -272,30 +299,30 @@ verbose:
     use_time_ratio:
       status: INPUT
       unit: /1
-      value: 0.5
+      value: 1.0
     workloads:
       status: COMPLETED
       unit: workload_rate:W
       value:
       - load_percentage: 0
-        power_watt: 14.4
+        power_watt: 42.0
       - load_percentage: 10
-        power_watt: 38.4
+        power_watt: 112.0
       - load_percentage: 50
-        power_watt: 90.0
+        power_watt: 262.5
       - load_percentage: 100
-        power_watt: 122.4
+        power_watt: 357.0
   MOTHERBOARD-1:
     duration:
       unit: hours
-      value: 5
+      value: 100
     impacts:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.0
-          min: 0.0
-          value: 0.0
+          max: 0.02
+          min: 0.02
+          value: 0.02
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -303,9 +330,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 66.1
-          min: 66.1
-          value: 66.1
+          max: 396.6
+          min: 396.6
+          value: 396.6
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -313,9 +340,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 836.0
-          min: 836.0
-          value: 836.0
+          max: 5016.0
+          min: 5016.0
+          value: 5016.0
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -328,14 +355,14 @@ verbose:
   POWER_SUPPLY-1:
     duration:
       unit: hours
-      value: 5
+      value: 100
     impacts:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.08
-          min: 0.02
-          value: 0.05
+          max: 0.5
+          min: 0.1
+          value: 0.3
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -343,9 +370,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 243.0
-          min: 48.6
-          value: 150.0
+          max: 1458.0
+          min: 291.6
+          value: 900.0
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -353,9 +380,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 3520.0
-          min: 704.0
-          value: 2100.0
+          max: 21120.0
+          min: 4224.0
+          value: 13000.0
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -367,8 +394,10 @@ verbose:
       unit: kg
       value: 2.99
     units:
-      status: INPUT
-      value: 2
+      max: 2.0
+      min: 2.0
+      status: ARCHETYPE
+      value: 2.0
   RAM-1:
     adp_factor:
       max: 0.0
@@ -378,25 +407,27 @@ verbose:
       unit: kg Sbeq/kWh
       value: 0.0
     avg_power:
-      max: 109.06
-      min: 109.06
+      max: 218.11
+      min: 218.11
       status: COMPLETED
       unit: W
-      value: 109.06
+      value: 218.11
     capacity:
-      status: INPUT
+      max: 32.0
+      min: 32.0
+      status: ARCHETYPE
       unit: GB
-      value: 32
+      value: 32.0
     density:
-      max: 1.12
-      min: 0.75
-      source: Average of 3 rows
+      max: 2.38
+      min: 0.62
+      source: Average of 11 rows
       status: COMPLETED
       unit: GB/cm2
-      value: 0.92
+      value: 1.24
     duration:
       unit: hours
-      value: 5
+      value: 100
     gwp_factor:
       max: 0.45
       min: 0.45
@@ -405,19 +436,19 @@ verbose:
       unit: kg CO2eq/kWh
       value: 0.45
     hours_life_time:
-      max: 5
-      min: 5
+      max: 100
+      min: 100
       source: from device
       status: COMPLETED
       unit: hours
-      value: 5
+      value: 100
     impacts:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.05
-          min: 0.04
-          value: 0.05
+          max: 0.12
+          min: 0.06
+          value: 0.08
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -428,34 +459,31 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 1189.0
-          min: 813.6
-          value: 980.0
+          max: 2829.0
+          min: 836.7
+          value: 1500.0
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
         use:
-          max: 0.12
-          min: 0.12
-          value: 0.12
+          max: 9.81
+          min: 9.81
+          value: 9.81
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 14870.0
-          min: 10210.0
-          value: 12300.0
+          max: 35320.0
+          min: 10600.0
+          value: 19000.0
           warnings:
           - End of life is not included in the calculation
         unit: MJ
         use:
-          max: 2.32
-          min: 2.32
-          value: 2.32
-    manufacturer:
-      status: INPUT
-      value: Micron
+          max: 185.6
+          min: 185.6
+          value: 185.6
     params:
-      source: '(ram_electrical_factor_per_go : 0.284) * (ram_capacity: 32) '
+      source: '(ram_electrical_factor_per_go : 0.284) * (ram_capacity: 32.0) '
       status: COMPLETED
       value:
         a: 9.09
@@ -473,8 +501,10 @@ verbose:
       unit: '%'
       value: 50.0
     units:
-      status: INPUT
-      value: 12
+      max: 192.0
+      min: 192.0
+      status: ARCHETYPE
+      value: 192.0
     usage_location:
       status: INPUT
       unit: CodSP3 - NCS Country Codes - NATO
@@ -482,113 +512,7 @@ verbose:
     use_time_ratio:
       status: INPUT
       unit: /1
-      value: 0.5
-  SSD-1:
-    capacity:
-      status: INPUT
-      unit: GB
-      value: 400
-    density:
-      max: 1.0
-      min: 0.1
-      status: ARCHETYPE
-      unit: GB/cm2
-      value: 48.5
-    duration:
-      unit: hours
-      value: 5
-    impacts:
-      adp:
-        description: Use of minerals and fossil ressources
-        embedded:
-          max: 0.25
-          min: 0.03
-          value: 0.0
-          warnings:
-          - End of life is not included in the calculation
-          - Uncertainty from technical characteristics is very important. Results
-            should be interpreted with caution (see min and max values)
-        unit: kgSbeq
-        use: not implemented
-      gwp:
-        description: Total climate change
-        embedded:
-          max: 8806.0
-          min: 886.3
-          value: 20.0
-          warnings:
-          - End of life is not included in the calculation
-          - Uncertainty from technical characteristics is very important. Results
-            should be interpreted with caution (see min and max values)
-        unit: kgCO2eq
-        use: not implemented
-      pe:
-        description: Consumption of primary energy
-        embedded:
-          max: 109300.0
-          min: 10990.0
-          value: 300.0
-          warnings:
-          - End of life is not included in the calculation
-          - Uncertainty from technical characteristics is very important. Results
-            should be interpreted with caution (see min and max values)
-        unit: MJ
-        use: not implemented
-    units:
-      status: INPUT
-      value: 1
-  SSD-2:
-    capacity:
-      status: INPUT
-      unit: GB
-      value: 400
-    density:
-      max: 71.0
-      min: 19.0
-      source: Average of 7 rows
-      status: COMPLETED
-      unit: GB/cm2
-      value: 42.51
-    duration:
-      unit: hours
-      value: 5
-    impacts:
-      adp:
-        description: Use of minerals and fossil ressources
-        embedded:
-          max: 0.0
-          min: 0.0
-          value: 0.0
-          warnings:
-          - End of life is not included in the calculation
-        unit: kgSbeq
-        use: not implemented
-      gwp:
-        description: Total climate change
-        embedded:
-          max: 52.66
-          min: 18.73
-          value: 27.0
-          warnings:
-          - End of life is not included in the calculation
-        unit: kgCO2eq
-        use: not implemented
-      pe:
-        description: Consumption of primary energy
-        embedded:
-          max: 648.7
-          min: 227.8
-          value: 330.0
-          warnings:
-          - End of life is not included in the calculation
-        unit: MJ
-        use: not implemented
-    manufacturer:
-      status: INPUT
-      value: Samsung
-    units:
-      status: INPUT
-      value: 1
+      value: 1.0
   adp_factor:
     max: 0.0
     min: 0.0
@@ -597,14 +521,14 @@ verbose:
     unit: kg Sbeq/kWh
     value: 0.0
   avg_power:
-    max: 577.24
-    min: 288.62
+    max: 5376.69
+    min: 4032.52
     status: COMPLETED
     unit: W
-    value: 383.86
+    value: 4469.37
   duration:
     unit: hours
-    value: 5
+    value: 100
   gwp_factor:
     max: 0.45
     min: 0.45
@@ -613,15 +537,19 @@ verbose:
     unit: kg CO2eq/kWh
     value: 0.45
   hours_life_time:
-    max: 5
-    min: 5
+    max: 100
+    min: 100
     source: from device
     status: COMPLETED
     unit: hours
-    value: 5
+    value: 100
+  memory:
+    status: ARCHETYPE
+    unit: GB
+    value: 768.0
   other_consumption_ratio:
-    max: 1.0
-    min: 0.0
+    max: 0.6
+    min: 0.2
     status: ARCHETYPE
     unit: ratio /1
     value: 0.33
@@ -632,11 +560,6 @@ verbose:
     status: COMPLETED
     unit: MJ/kWh
     value: 8.51
-  units:
-    max: 1
-    min: 1
-    status: ARCHETYPE
-    value: 1
   usage_location:
     status: INPUT
     unit: CodSP3 - NCS Country Codes - NATO
@@ -644,4 +567,7 @@ verbose:
   use_time_ratio:
     status: INPUT
     unit: /1
-    value: 0.5
+    value: 1.0
+  vcpu:
+    status: ARCHETYPE
+    value: 192.0
