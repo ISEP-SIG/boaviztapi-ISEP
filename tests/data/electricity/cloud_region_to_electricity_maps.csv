@@ -56,9 +56,9 @@ Australia,Rottnest Island,AU-WA-RI,gcp,australia-southeast1
 Aruba,Aruba,AW,aws,us-east-1
 Aruba,Aruba,AW,azure,brazil-south
 Aruba,Aruba,AW,gcp,us-east4
-Åland Islands,Åland Islands,AX,aws,eu-north-1
-Åland Islands,Åland Islands,AX,azure,sweden-central
-Åland Islands,Åland Islands,AX,gcp,europe-north1
+ï¿½land Islands,ï¿½land Islands,AX,aws,eu-north-1
+ï¿½land Islands,ï¿½land Islands,AX,azure,sweden-central
+ï¿½land Islands,ï¿½land Islands,AX,gcp,europe-north1
 Azerbaijan,Azerbaijan,AZ,aws,me-south-1
 Azerbaijan,Azerbaijan,AZ,azure,qatar-central
 Azerbaijan,Azerbaijan,AZ,gcp,me-central1
@@ -152,9 +152,9 @@ Canada,Ontario,CA-ON,gcp,northamerica-northeast1
 Canada,Prince Edward Island,CA-PE,aws,ca-central-1
 Canada,Prince Edward Island,CA-PE,azure,canada-central
 Canada,Prince Edward Island,CA-PE,gcp,northamerica-northeast1
-Canada,Québec,CA-QC,aws,ca-central-1
-Canada,Québec,CA-QC,azure,canada-central
-Canada,Québec,CA-QC,gcp,northamerica-northeast1
+Canada,Quï¿½bec,CA-QC,aws,ca-central-1
+Canada,Quï¿½bec,CA-QC,azure,canada-central
+Canada,Quï¿½bec,CA-QC,gcp,northamerica-northeast1
 Canada,Saskatchewan,CA-SK,aws,ca-central-1
 Canada,Saskatchewan,CA-SK,azure,canada-central
 Canada,Saskatchewan,CA-SK,gcp,northamerica-northeast1
@@ -176,9 +176,9 @@ Switzerland,Switzerland,CH,gcp,europe-west6
 Ivory Coast,Ivory Coast,CI,aws,eu-south-2
 Ivory Coast,Ivory Coast,CI,azure,france-central
 Ivory Coast,Ivory Coast,CI,gcp,europe-southwest1
-Chile,Sistema Eléctrico Nacional,CL-SEN,aws,sa-east-1
-Chile,Sistema Eléctrico Nacional,CL-SEN,azure,brazil-south
-Chile,Sistema Eléctrico Nacional,CL-SEN,gcp,southamerica-west1
+Chile,Sistema Elï¿½ctrico Nacional,CL-SEN,aws,sa-east-1
+Chile,Sistema Elï¿½ctrico Nacional,CL-SEN,azure,brazil-south
+Chile,Sistema Elï¿½ctrico Nacional,CL-SEN,gcp,southamerica-west1
 Cameroon,Cameroon,CM,aws,il-central-1
 Cameroon,Cameroon,CM,azure,south-africa-north
 Cameroon,Cameroon,CM,gcp,me-west1
@@ -197,9 +197,9 @@ Cuba,Cuba,CU,gcp,us-east4
 Cabo Verde,Cabo Verde,CV,aws,eu-south-2
 Cabo Verde,Cabo Verde,CV,azure,france-central
 Cabo Verde,Cabo Verde,CV,gcp,europe-southwest1
-Curaçao,Curaçao,CW,aws,sa-east-1
-Curaçao,Curaçao,CW,azure,brazil-south
-Curaçao,Curaçao,CW,gcp,southamerica-east1paulo
+Curaï¿½ao,Curaï¿½ao,CW,aws,sa-east-1
+Curaï¿½ao,Curaï¿½ao,CW,azure,brazil-south
+Curaï¿½ao,Curaï¿½ao,CW,gcp,southamerica-east1paulo
 Cyprus,Cyprus,CY,aws,il-central-1
 Cyprus,Cyprus,CY,azure,qatar-central
 Cyprus,Cyprus,CY,gcp,me-west1
@@ -677,9 +677,9 @@ Paraguay,Paraguay,PY,gcp,southamerica-east1paulo
 Qatar,Qatar,QA,aws,me-south-1
 Qatar,Qatar,QA,azure,qatar-central
 Qatar,Qatar,QA,gcp,me-central1
-Réunion,Réunion,RE,aws,af-south-1
-Réunion,Réunion,RE,azure,south-africa-north
-Réunion,Réunion,RE,gcp,africa-south1
+Rï¿½union,Rï¿½union,RE,aws,af-south-1
+Rï¿½union,Rï¿½union,RE,azure,south-africa-north
+Rï¿½union,Rï¿½union,RE,gcp,africa-south1
 Romania,Romania,RO,aws,eu-south-1
 Romania,Romania,RO,azure,germany-north
 Romania,Romania,RO,gcp,europe-central2
