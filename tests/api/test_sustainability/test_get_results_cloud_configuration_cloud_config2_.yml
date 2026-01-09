@@ -151,7 +151,7 @@ verbose:
     adp_factor:
       max: 0.0
       min: 0.0
-      source: ADEME Base IMPACTS Â®
+      source: ADEME Base IMPACTS ®
       status: COMPLETED
       unit: kg Sbeq/kWh
       value: 0.0
@@ -405,7 +405,7 @@ verbose:
     adp_factor:
       max: 0.0
       min: 0.0
-      source: ADEME Base IMPACTS Â®
+      source: ADEME Base IMPACTS ®
       status: COMPLETED
       unit: kg Sbeq/kWh
       value: 0.0
@@ -578,7 +578,7 @@ verbose:
   adp_factor:
     max: 0.0
     min: 0.0
-    source: ADEME Base IMPACTS Â®
+    source: ADEME Base IMPACTS ®
     status: COMPLETED
     unit: kg Sbeq/kWh
     value: 0.0
