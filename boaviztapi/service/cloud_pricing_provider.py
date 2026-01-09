@@ -4,6 +4,35 @@ import pandas as pd
 
 from boaviztapi import data_dir
 from boaviztapi.model.cloud_prices.cloud_prices import AzurePriceModel, GcpPriceModel, AWSPriceModel
+from boaviztapi.model.crud_models.configuration_model import CloudConfigurationModel
+
+
+cloud_region_map_path = os.path.join(data_dir, 'electricity/cloud_region_to_electricity_maps.csv')
+cloud_region_map = pd.read_csv(cloud_region_map_path, header=0)
+def _estimate_cloud_region(localisation: str, provider: str) -> str:
+    """
+    Estimate the approximate cloud region in which the device is located by using a mapping file. The mapping file
+    contains a map between Electricity Maps zones and cloud provider regions.
+
+    Args:
+        localisation: str - The country/zone-code in which the cloud configuration is made
+        provider: str - cloud provider, e.g. 'aws'
+
+    Returns:
+        Nearest cloud provider region to the provided Electricity Maps zone code
+    """
+    localisation = localisation.lower().strip()
+    provider = provider.lower().strip()
+    if localisation not in cloud_region_map['zone_code'].unique():
+        raise ValueError(f"Given localisation {localisation} is not mapped to any cloud region of provider {provider}!")
+    if provider not in cloud_region_map['provider'].unique():
+        raise ValueError(f"Given provider {provider} is not recognised!")
+    region = cloud_region_map[(cloud_region_map['zone_code'] == localisation)
+                              and (cloud_region_map['provider'] == provider)]['region'].values[0]
+    if not region:
+        raise ValueError(f"No cloud region found for localisation {localisation} and provider {provider}!")
+    return region
+
 
 class AWSPriceProvider:
     _instance = None
