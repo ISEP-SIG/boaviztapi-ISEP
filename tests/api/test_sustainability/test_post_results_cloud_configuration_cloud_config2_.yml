@@ -27,9 +27,9 @@ impacts:
   adp:
     description: Use of minerals and fossil ressources
     embedded:
-      max: 0.58
-      min: 0.3
-      value: 0.42
+      max: 0.93
+      min: 0.43
+      value: 0.64
       warnings:
       - End of life is not included in the calculation
     unit: kgSbeq
@@ -40,9 +40,9 @@ impacts:
   gwp:
     description: Total climate change
     embedded:
-      max: 4306.0
-      min: 1539.0
-      value: 2700.0
+      max: 5703.0
+      min: 2160.0
+      value: 3800.0
       warnings:
       - End of life is not included in the calculation
     unit: kgCO2eq
@@ -53,9 +53,9 @@ impacts:
   pe:
     description: Consumption of primary energy
     embedded:
-      max: 56470.0
-      min: 20390.0
-      value: 36000.0
+      max: 76340.0
+      min: 28900.0
+      value: 51000.0
       warnings:
       - End of life is not included in the calculation
     unit: MJ
@@ -82,9 +82,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 20.04
-          min: 20.04
-          value: 20.04
+          max: 40.08
+          min: 40.08
+          value: 40.08
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -92,9 +92,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 205.8
-          min: 205.8
-          value: 205.8
+          max: 411.6
+          min: 411.6
+          value: 411.6
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -115,9 +115,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.08
-          min: 0.06
-          value: 0.06
+          max: 0.17
+          min: 0.12
+          value: 0.12
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -125,9 +125,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 450.0
-          min: 257.7
-          value: 450.0
+          max: 900.0
+          min: 515.4
+          value: 900.0
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -135,9 +135,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 6600.0
-          min: 3686.0
-          value: 6600.0
+          max: 13200.0
+          min: 7373.0
+          value: 13200.0
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -291,10 +291,10 @@ verbose:
       unit: '%'
       value: 50.0
     units:
-      max: 2.0
-      min: 2.0
+      max: 1.0
+      min: 1.0
       status: ARCHETYPE
-      value: 2.0
+      value: 1.0
     usage_location:
       status: INPUT
       unit: CodSP3 - NCS Country Codes - NATO
@@ -323,9 +323,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.01
-          min: 0.01
-          value: 0.01
+          max: 0.02
+          min: 0.02
+          value: 0.02
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -333,9 +333,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 198.3
-          min: 198.3
-          value: 198.3
+          max: 396.6
+          min: 396.6
+          value: 396.6
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -343,9 +343,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 2508.0
-          min: 2508.0
-          value: 2508.0
+          max: 5016.0
+          min: 5016.0
+          value: 5016.0
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -363,9 +363,9 @@ verbose:
       adp:
         description: Use of minerals and fossil ressources
         embedded:
-          max: 0.25
-          min: 0.05
-          value: 0.15
+          max: 0.5
+          min: 0.1
+          value: 0.3
           warnings:
           - End of life is not included in the calculation
         unit: kgSbeq
@@ -373,9 +373,9 @@ verbose:
       gwp:
         description: Total climate change
         embedded:
-          max: 729.0
-          min: 145.8
-          value: 440.0
+          max: 1458.0
+          min: 291.6
+          value: 900.0
           warnings:
           - End of life is not included in the calculation
         unit: kgCO2eq
@@ -383,9 +383,9 @@ verbose:
       pe:
         description: Consumption of primary energy
         embedded:
-          max: 10560.0
-          min: 2112.0
-          value: 6300.0
+          max: 21120.0
+          min: 4224.0
+          value: 13000.0
           warnings:
           - End of life is not included in the calculation
         unit: MJ
@@ -504,10 +504,10 @@ verbose:
       unit: '%'
       value: 50.0
     units:
-      max: 192.0
-      min: 192.0
+      max: 8.0
+      min: 8.0
       status: ARCHETYPE
-      value: 192.0
+      value: 8.0
     usage_location:
       status: INPUT
       unit: CodSP3 - NCS Country Codes - NATO
@@ -516,6 +516,65 @@ verbose:
       status: INPUT
       unit: /1
       value: 1.0
+  SSD-1:
+    capacity:
+      max: 976.0
+      min: 976.0
+      status: ARCHETYPE
+      unit: GB
+      value: 976.0
+    density:
+      max: 128.0
+      min: 16.4
+      source: Average of 19 rows
+      status: COMPLETED
+      unit: GB/cm2
+      value: 54.88
+    duration:
+      unit: hours
+      value: 100
+    impacts:
+      adp:
+        description: Use of minerals and fossil ressources
+        embedded:
+          max: 0.0
+          min: 0.0
+          value: 0.0
+          warnings:
+          - End of life is not included in the calculation
+          - Uncertainty from technical characteristics is very important. Results
+            should be interpreted with caution (see min and max values)
+        unit: kgSbeq
+        use: not implemented
+      gwp:
+        description: Total climate change
+        embedded:
+          max: 0.0
+          min: 0.0
+          value: 0.0
+          warnings:
+          - End of life is not included in the calculation
+          - Uncertainty from technical characteristics is very important. Results
+            should be interpreted with caution (see min and max values)
+        unit: kgCO2eq
+        use: not implemented
+      pe:
+        description: Consumption of primary energy
+        embedded:
+          max: 0.0
+          min: 0.0
+          value: 0.0
+          warnings:
+          - End of life is not included in the calculation
+          - Uncertainty from technical characteristics is very important. Results
+            should be interpreted with caution (see min and max values)
+        unit: MJ
+        use: not implemented
+    units:
+      max: 5.0
+      min: 5.0
+      status: ARCHETYPE
+      value: 5.0
   adp_factor:
     max: 0.0
     min: 0.0
@@ -563,6 +622,10 @@ verbose:
     status: COMPLETED
     unit: MJ/kWh
     value: 8.51
+  ssd_storage:
+    status: ARCHETYPE
+    unit: GB
+    value: 0.0
   usage_location:
     status: INPUT
     unit: CodSP3 - NCS Country Codes - NATO
