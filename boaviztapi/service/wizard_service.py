@@ -9,11 +9,13 @@ from datetime import datetime
 
 from boaviztapi.model.crud_models.configuration_model import CloudConfigurationModel, OnPremiseConfigurationModel, \
     CloudServerUsage
+from boaviztapi.service.archetype import get_cloud_instance_archetype
 from boaviztapi.service.electricity_maps.carbon_intensity_provider import CarbonIntensityProvider
 from boaviztapi.service.cloud_pricing_provider import _estimate_localisation, AWSPriceProvider, AzurePriceProvider, \
     GcpPriceProvider
 
 from boaviztapi.service.utils_provider import data_dir
+from boaviztapi.utils.costs_calculator import CostCalculator, CurrencyConvertedCostBreakdown
 
 # Initialise logger
 log = logging.getLogger(__name__)
@@ -132,8 +134,92 @@ def strategy_lift_shift(input_config: OnPremiseConfigurationModel, provider_name
     best_config = filtered_configs.iloc[0].to_dict()
     return _cloud_instance_to_cloud_config(input_config, best_config)
 
-def strategy_right_sizing(input_config: CloudConfigurationModel) -> CloudConfigurationModel:
-    return CloudConfigurationModel()
+
+async def _get_cloud_costs_for_instance(input_config: CloudConfigurationModel) -> CurrencyConvertedCostBreakdown:
+    calculator = CostCalculator(duration=getattr(input_config.usage, "lifespan", 1))
+    cost_results = await calculator.configuration_costs(input_config)
+    cost_results = cost_results.model_dump(exclude_none=True)
+    return cost_results
+
+
+async def strategy_right_sizing(input_config: CloudConfigurationModel, provider_name: str) -> CloudConfigurationModel:
+    provider_name = provider_name.strip().lower()
+    if provider_name not in all_cloud_configs['provider.name'].unique():
+        raise ValueError(f"Provider {provider_name} not found in the cloud archetypes")
+
+    if not input_config.usage.serverLoad and not input_config.usage.serverLoadAdvanced:
+        raise ValueError("Basic/Advanced server load must be specified in the input configuration")
+
+    cloud_archetype = get_cloud_instance_archetype(input_config.instance_type, input_config.cloud_provider)
+    if not cloud_archetype:
+        raise ValueError(f"{input_config.instance_type} at {input_config.cloud_provider} not found")
+
+    # Get the current usage load
+    if input_config.usage.serverLoadAdvanced:
+        current_load = np.average([slot.load for slot in input_config.usage.serverLoadAdvanced])
+    else:
+        current_load = input_config.usage.serverLoad
+
+    # If the current usage load is >= 85%, then the configuration is already optimal
+    if current_load >= 85:
+        return input_config
+
+    # The target load for a reasonable configuration is 85%
+    target_load = 85
+
+    mask = (
+            (all_cloud_configs['provider.name'] == provider_name) &
+            (all_cloud_configs['vcpu'] <= cloud_archetype['vcpu']['default']) &
+            (all_cloud_configs['memory'] >= cloud_archetype['memory']['default'])
+    )
+    filtered_configs = all_cloud_configs[mask].copy()
+
+    if len(filtered_configs) == 0:
+        raise ValueError(f"No cloud configuration found for provider {provider_name} that matches the given criteria!")
+    if not cloud_archetype['vcpu']['default'] or cloud_archetype['vcpu']['default'] == 0:
+        raise ValueError(
+            f"No default vCPU value found for the instance {input_config.instance_type} and cloud provider {input_config.cloud_provider}!")
+
+    # Compute the estimated load for each configuration
+    filtered_configs['estimated_load'] = (cloud_archetype['vcpu']['default'] * current_load) / filtered_configs['vcpu']
+
+    # Sort the configurations based on the estimated loads
+    filtered_configs = filtered_configs.sort_values(
+        by=['estimated_load'],
+        ascending=[True]
+    )
+
+    # Limit the number of configurations to have a better load than the current one, but to be under or equal to the target load to allow headroom
+    filtered_configs = filtered_configs[(filtered_configs['estimated_load'] >= current_load) & (
+                filtered_configs['estimated_load'] <= target_load)].copy()
+
+    if len(filtered_configs) == 0:
+        raise ValueError(f"No cloud configuration found for provider {provider_name} that matches the given criteria!")
+
+    # There are more configs, use pricing as a tiebreaker
+    for index, row in filtered_configs.iterrows():
+        try:
+            temp_config = input_config.model_copy(deep=True)
+            temp_config.instance_type = row['id']
+            costs = await _get_cloud_costs_for_instance(temp_config)
+            filtered_configs.at[index, 'estimated_cost'] = costs['eur']['total_cost']
+        except Exception:
+            filtered_configs.at[index, 'estimated_cost'] = 0.0
+
+    if 'estimated_cost' in filtered_configs.columns:
+        filtered_configs = filtered_configs.sort_values(by=['estimated_load', 'estimated_cost'], ascending=[False, True])
+
+    best_match = filtered_configs.iloc[0]
+    result_config = input_config.model_copy(deep=True)
+    result_config.cloud_provider = provider_name
+    if result_config.usage.serverLoad:
+        result_config.usage.serverLoad = best_match['estimated_load']
+    if result_config.usage.serverLoadAdvanced:
+        for slot in result_config.usage.serverLoadAdvanced:
+            slot.load = best_match['estimated_load']
+    result_config.instance_type = best_match['id']
+
+    return result_config
 
 async def strategy_greener_region(input_config: CloudConfigurationModel) -> CloudConfigurationModel:
     if not input_config.usage.localisation:

@@ -62,7 +62,6 @@ class ElectricityCostsProvider(ElectricityMapsService):
         cached_results = await ElectricityCostsProvider.get_cache_scheduler(temporalGranularity).get_results()
         if cached_results and url in cached_results:
             return cached_results[url]
-
         return ElectricityMapsService._perform_request(url)
 
     @staticmethod

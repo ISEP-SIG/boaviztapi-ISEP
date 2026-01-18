@@ -2,7 +2,7 @@ from fastapi import APIRouter, status, Response, Depends, HTTPException
 
 from boaviztapi.model.crud_models.configuration_model import OnPremiseConfigurationModel, CloudConfigurationModel
 from boaviztapi.service.cloud_provider import get_cloud_providers
-from boaviztapi.service.wizard_service import strategy_lift_shift, strategy_greener_region
+from boaviztapi.service.wizard_service import strategy_lift_shift, strategy_greener_region, strategy_right_sizing
 
 wizard_router = APIRouter(
     prefix='/v1/wizard',
@@ -41,6 +41,7 @@ async def get_greener_region_strategy(
                     description="Optimise your given cloud configuration to reduce costs and improve efficiency",
                     response_model=CloudConfigurationModel)
 async def get_rightsizing_strategy(
-        cloud_config: CloudConfigurationModel
+        cloud_config: CloudConfigurationModel,
+        provider: str = Depends(_validate_provider)
 ):
-    return Response(status_code=status.HTTP_200_OK, content="TODO")
+    return await strategy_right_sizing(cloud_config, provider)
