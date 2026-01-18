@@ -26,7 +26,7 @@ async def get_onprem_server_configuration():
 
 
 @options_router.get('/cloud/configuration', description="Return the available configuration options for cloud instance configuration form inputs")
-# @cache(expire=60 * 60 * 24)
+@cache(expire=60 * 60 * 24)
 async def get_cloud_instance_configuration():
     response = dict()
     response["cloud_providers"] = cloud_provider.get_cloud_providers()
