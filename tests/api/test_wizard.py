@@ -9,6 +9,7 @@ from httpx import AsyncClient, ASGITransport
 from boaviztapi.main import app
 from boaviztapi.model.crud_models.configuration_model import OnPremiseConfigurationModel, OnPremiseServerUsage, \
     CloudConfigurationModel
+from boaviztapi.service.cloud_provider import get_cloud_instance_types
 from boaviztapi.service.wizard_service import strategy_lift_shift
 
 # Pytest Configuration
@@ -155,7 +156,8 @@ def _check_lift_shift(on_prem: OnPremiseConfigurationModel, cloud: CloudConfigur
     # filter for valid candidates
     candidates = provider_configs[
         (provider_configs['vcpu'] >= req_vcpus) &
-        (provider_configs['memory'] >= req_ram)
+        (provider_configs['memory'] >= req_ram) &
+        (provider_configs['id'].isin(get_cloud_instance_types(provider)))
         ].sort_values(by=['vcpu', 'memory'], ascending=[True, True])
 
     assert not candidates.empty
@@ -185,7 +187,8 @@ def _check_no_possible_solution_lift_shift(on_prem: OnPremiseConfigurationModel,
     # filter for valid candidates
     candidates = provider_configs[
         (provider_configs['vcpu'] >= req_vcpus) &
-        (provider_configs['memory'] >= req_ram)
+        (provider_configs['memory'] >= req_ram) &
+        (provider_configs['id'].isin(get_cloud_instance_types(provider)))
         ].sort_values(by=['vcpu', 'memory'], ascending=[True, True])
     return candidates.empty
 
