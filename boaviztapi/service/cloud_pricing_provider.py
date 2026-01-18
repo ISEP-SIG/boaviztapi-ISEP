@@ -160,7 +160,7 @@ class AzurePriceProvider:
         self.instance_ids = self.azure_prices.index.get_level_values('id').unique().tolist()
 
     @classmethod
-    def _normalise_instance_id(cls, instance_id: str):
+    def normalise_instance_id(cls, instance_id: str):
         """
         Normalise archetype instance_id to match the pricing map instance_ids
         e.g. "standard_d32ds_v4" -> "d32dsv4"
@@ -187,7 +187,7 @@ class AzurePriceProvider:
 
     def get_all(self, region: str, instance_id: str) -> list[AzurePriceModel]:
         region = region.lower().strip()
-        instance_id = self._normalise_instance_id(instance_id)
+        instance_id = self.normalise_instance_id(instance_id)
         if region not in self.regions:
             raise ValueError(f"Region {region} is not a valid Azure region!")
         if instance_id not in self.instance_ids:
@@ -197,7 +197,7 @@ class AzurePriceProvider:
     def get_prices_with_saving(self, region: str, instance_id: str, savings_type: str) -> list[AzurePriceModel]:
         region = region.lower().strip()
         savings_type = savings_type.strip()
-        instance_id = self._normalise_instance_id(instance_id)
+        instance_id = self.normalise_instance_id(instance_id)
         if region not in self.regions:
             raise ValueError(f"Region {region} is not a valid Azure region!")
         if savings_type not in self.savings_types:
@@ -208,7 +208,7 @@ class AzurePriceProvider:
         return self._df_to_pydantic(df=self.azure_prices.xs((region, savings_type, instance_id), level=('region', 'saving', 'id')), region=region, saving=savings_type, instance_id=instance_id)
 
     def get_regions_for_instance(self, instance_id: str):
-        instance_id = self._normalise_instance_id(instance_id)
+        instance_id = self.normalise_instance_id(instance_id)
         if instance_id not in self.instance_ids:
             raise ValueError(f"Instance {instance_id} is not a valid AWS instance!")
         return self.azure_prices.xs(instance_id, level='id').index.get_level_values('region').unique().tolist()
