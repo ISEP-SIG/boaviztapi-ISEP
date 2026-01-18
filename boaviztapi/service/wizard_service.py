@@ -10,6 +10,7 @@ from datetime import datetime
 from boaviztapi.model.crud_models.configuration_model import CloudConfigurationModel, OnPremiseConfigurationModel, \
     CloudServerUsage
 from boaviztapi.service.archetype import get_cloud_instance_archetype
+from boaviztapi.service.cloud_provider import get_cloud_instance_types
 from boaviztapi.service.electricity_maps.carbon_intensity_provider import CarbonIntensityProvider
 from boaviztapi.service.cloud_pricing_provider import _estimate_localisation, AWSPriceProvider, AzurePriceProvider, \
     GcpPriceProvider
@@ -116,11 +117,13 @@ def strategy_lift_shift(input_config: OnPremiseConfigurationModel, provider_name
                     f"Limiting input_ram to the maximum provided by the cloud provider!")
         input_ram = min(input_ram, provider_configs['memory'].max())
 
+    valid_instance_types = get_cloud_instance_types(provider_name)
     # Make a filter mask for the dataframe
     mask = (
             (all_cloud_configs['provider.name'] == provider_name) &
             (all_cloud_configs['vcpu'] >= input_vcpus) &
-            (all_cloud_configs['memory'] >= input_ram)
+            (all_cloud_configs['memory'] >= input_ram) &
+            (all_cloud_configs['id'].isin(valid_instance_types))
     )
     # Filter the dataframe with the mask
     filtered_configs = all_cloud_configs[mask].copy()
@@ -167,10 +170,12 @@ async def strategy_right_sizing(input_config: CloudConfigurationModel, provider_
     # The target load for a reasonable configuration is 85%
     target_load = 85
 
+    valid_instance_types = get_cloud_instance_types(provider_name)
     mask = (
             (all_cloud_configs['provider.name'] == provider_name) &
             (all_cloud_configs['vcpu'] <= cloud_archetype['vcpu']['default']) &
-            (all_cloud_configs['memory'] >= cloud_archetype['memory']['default'])
+            (all_cloud_configs['memory'] >= cloud_archetype['memory']['default']) &
+            (all_cloud_configs['id'].isin(valid_instance_types))
     )
     filtered_configs = all_cloud_configs[mask].copy()
 
