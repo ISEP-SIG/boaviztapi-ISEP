@@ -182,14 +182,7 @@ class ElectricityCostsProvider(ElectricityMapsService):
 
     @staticmethod
     def get_eic_countries_for_instance(provider: str, instance_type: str):
-        supported_zones = get_localisations_for_instance(provider, instance_type)
         all_zones = ElectricityCostsProvider.get_eic_countries()
+        supported_zones = get_localisations_for_instance(provider, instance_type, all_zones)
 
-        return [
-            zone
-            for zone in all_zones
-            if zone.zone_code in supported_zones
-               or zone.zone_code.split("-")[0] in {
-                   z.split("-")[0] for z in supported_zones
-               }
-        ]
+        return [zone for zone in all_zones if zone.zone_code in supported_zones]
