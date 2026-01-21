@@ -41,7 +41,7 @@ azure_cloud_config = {
             "name": "Development Cloud",
             "created": "2023-01-01T00:00:00.000Z",
             "cloud_provider": "azure",
-            "instance_type": "standard_e2ads_v5",
+            "instance_type": "standard_e2as_v4",
             "user_id": "1234567890",
             "usage": {
                 "localisation": "NL",
