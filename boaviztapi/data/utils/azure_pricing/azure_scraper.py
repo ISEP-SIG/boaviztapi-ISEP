@@ -22,7 +22,7 @@ all_savings_plans = np.sort([
     "yrTerm3Standard.allUpfront",
     "yrTerm3Standard.hybridbenefit"
 ])
-all_instance_ids = np.sort(azure['instance_type'].unique().tolist())
+all_instance_ids = np.sort(azure['pretty_name_azure'].apply(lambda x: x.lower().replace(' ', '_').strip()).unique().tolist())
 
 # Build the prices dataframe for an instance
 azure_prices_idx = pd.MultiIndex.from_product([all_regions, all_savings_plans, all_instance_ids], names=['region', 'saving', 'id'])
@@ -35,7 +35,7 @@ records = []
 
 # Iterate over the dataframe rows directly using itertuples for speed
 for row in tqdm(azure.itertuples(index=False), total=len(azure)):
-    instance_id = row.instance_type
+    instance_id = row.pretty_name_azure.lower().replace(' ', '_').strip()
     pricing = row.pricing
 
     if not pricing:

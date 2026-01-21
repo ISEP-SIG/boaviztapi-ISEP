@@ -176,7 +176,9 @@ class CostCalculator:
         elif 'azure' == server.cloud_provider.lower():
             price_provider = AzurePriceProvider()
             cloud_region = _estimate_cloud_region(usage.localisation, server.cloud_provider)
+            print(cloud_region)
             hourly_costs: list[AzurePriceModel] = price_provider.get_prices_with_saving(region=cloud_region, instance_id=server.instance_type, savings_type=usage.reservedPlan)
+            print(hourly_costs)
             if len(hourly_costs) < 1:
                 warnings.append(f"There is no pricing information for the cloud region {cloud_region} ({usage.localisation}) and instance type {server.instance_type}")
                 return hourly_cost, warnings
@@ -222,6 +224,9 @@ class CostCalculator:
 
         energy_costs = price_per_mwh * mwh_used
 
+        if not hourly_cost:
+            hourly_cost = 0.0
+            warnings.append(f"No hourly costs could be found for the given pricing and instance types.")
         total_costs = hourly_cost * self.duration
         operating_costs = total_costs - energy_costs if total_costs != 0.0 else 0.0
 

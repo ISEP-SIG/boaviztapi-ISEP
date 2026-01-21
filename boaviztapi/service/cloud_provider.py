@@ -34,10 +34,7 @@ def get_cloud_instance_types(provider: str) -> List[str]:
         log.warning(f"Could not get the pricing instance ids for the provider '{provider}'")
         return archetype_instance_ids
 
-    # Normalise the ids between archetypes and pricing
     pricing_instance_ids = pricing_provider.instance_ids
-    if provider == 'azure':
-        archetype_instance_ids = [AzurePriceProvider.normalise_instance_id(id) for id in archetype_instance_ids]
     return list(set(archetype_instance_ids).intersection(pricing_instance_ids))
 
 def get_cloud_instance_types_for_all_providers():
