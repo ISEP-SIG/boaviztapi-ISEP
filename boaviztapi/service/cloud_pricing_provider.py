@@ -6,7 +6,6 @@ from boaviztapi import data_dir
 from boaviztapi.model.cloud_prices.cloud_prices import AzurePriceModel, GcpPriceModel, AWSPriceModel
 from boaviztapi.model.crud_models.configuration_model import CloudConfigurationModel
 
-
 cloud_region_map_path = os.path.join(data_dir, 'electricity/cloud_region_to_electricity_maps.csv')
 cloud_region_map = pd.read_csv(cloud_region_map_path, header=0)
 def _estimate_cloud_region(localisation: str, provider: str) -> str:
@@ -70,19 +69,20 @@ def get_regions_for_instance(provider: str, instance_id: str) -> list[str]:
 
     raise ValueError(f"Unsupported cloud provider: {provider}")
 
-def get_localisations_for_instance(provider: str, instance_id: str) -> set[str]:
+def get_localisations_for_instance(provider: str, instance_id: str, all_zones: list) -> set[str]:
     regions = get_regions_for_instance(provider, instance_id)
 
     localisations = set()
-    for region in regions:
+
+    for loc in all_zones:
         try:
-            zone = _estimate_localisation(region, provider)
-            localisations.add(zone)
+            region = _estimate_cloud_region(loc.zone_code, provider)
+            if region in regions:
+                localisations.add(loc.zone_code)
         except ValueError:
             continue
 
     return localisations
-
 
 class AWSPriceProvider:
     _instance = None
