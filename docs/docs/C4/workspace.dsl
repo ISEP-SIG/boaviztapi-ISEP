@@ -3,6 +3,9 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
     !identifiers hierarchical
 
     model {
+        properties {
+            "structurizr.groupSeparator" "-"
+        }
         # =========================================================
         # PEOPLE & MAIN SYSTEMS
         # =========================================================
@@ -21,7 +24,7 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
                     electricityRouter = component "Electricity Router" "Allows user to query electricity prices, power breakdowns and available countries" "FastAPI APIRouter" {
                         tags "Internal Component"
                     }
-                    authRouter = component "Authentication Router" "Provides authentication tooling for identity providers (Google)" {
+                    authRouter = component "Authentication Router" "Provides authentication tooling for identity providers (Google, Discord)" {
                         tags "Internal Component"
                     }
                     optionsRouter = component "Options Router" "Provides endpoints for the dropdown field values in the dashboard forms" {
@@ -42,13 +45,33 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
                     costsRouter = component "Costs Router" "Provides cost estimations for the electricity and usage of configurations" {
                         tags "Internal Component"
                     }
+                    currencyRouter = component "Currency Router" "Provides API endpoints for currency conversion and current conversion rates" {
+                        tags "Internal Component"
+                    }
+                    wizardRouter = component "Wizard Router" "Provides APIs for applying Green Cloud Strategies on cloud and on-premise configurations" {
+                        tags "Internal Component"
+                    }
                 }
 
                 group "Services" {
-                    costsProviderService = component "Electricity Costs Provider Service" "Provides functions to query real-time electricity prices from heterogeneous sources" "Python Script" {
-                       tags "Internal Component"
+                    group "Electricity Maps Services" {
+                        carbonIntensityProvider = component "Carbon Intensity Provider Service" "Interface for retrieving the carbon intensity results from ElectricityMaps API" {
+                            tags "Internal Component"
+                        }
+                        carbonFreeEnergyProvider = component "Carbon Free Energy Provider" "Interface for retrieving the carbon-free energy results from ElectricityMaps API" {
+                            tags "Internal Component"
+                        }
+                        renewableEnergyProvider = component "Renewable Energy Provider" "Interface for retrieving the renewable energy results from ElectricityMaps API" {
+                            tags "Internal Component"
+                        }
+                        costsProviderService = component "Electricity Costs Provider Service" "Provides functions to query real-time electricity prices from heterogeneous sources" "Python Script" {
+                            tags "Internal Component"
+                        }
                     }
-                    carbonIntensityProvider = component "Power Breakdown Provider Service" "Interface for retrieving the power breakdown results from ElectricityMaps API" {
+                    cloudPricingProvider = component "Cloud Instance Pricing Provider" "Retrieves the pricing for a given instance type and pricing plan of a cloud provider" {
+                        tags "Internal Component"
+                    }
+                    currencyConversionProvider = component "Currency Conversion Provider" "Provides currency conversion logic" {
                         tags "Internal Component"
                     }
                     sustainabilityProvider = component "Sustainability Computation Service" "Calculates the sustainability impacts of on-premise hardware and cloud instances" "Python Script" {
@@ -72,8 +95,21 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
                     cacheService = component "Cache Service" "Caching service used for caching external API calls" {
                         tags "Internal Component"
                     }
+                    wizardService = component "Wizard Service" "Service used to encapsulate the green cloud strategy business logic" {
+                        tags "Internal Component"
+                    }
                 }
             }
+        }
+
+        identityproviders = softwareSystem "OAuth Identity Providers" {
+            googleIdentityProviderSystem = container "Google Identity Provider" "Offers OAuth2 Authentication/Authorization functionality" {
+                tags "External System"
+            }
+            discordIdentityProviderSystem = container "Discord Identity Provider" "Offers OAuth2 Authentication/Authorization functionality" {
+                tags "External System"
+            }
+            tags "External System"
         }
 
         cache = softwareSystem "Cache System" "Caching layer using MongoDB" {
@@ -98,7 +134,7 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
         electricityMapsSystem = softwareSystem "ElectricityMaps API" "Allows clients to compare electricity sources (fossils vs hydro) in real time" {
             tags "External System"
         }
-        googleIdentityProviderSystem = softwareSystem "Google Identity Provider" "Offers OAuth2 Authentication/Authorization functionality" {
+        frankfurterCurrencySystem = softwareSystem "Frankfurter Currency API" "Offers the most up to date currency rates" {
             tags "External System"
         }
         boaviztaSystem = softwareSystem "Boavizta Sustainability Impacts System" "Open-source API allowing clients to compute sustainability impacts" {
@@ -111,7 +147,7 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
         gcpSystem -> vantageSystem "Gets cloud instance information using"
         gcpSystem -> electricityMapsSystem "Gets electricity source breakdown and pricing information using"
         gcpSystem -> boaviztaSystem "Builds upon the foundation set by" "Github Fork"
-        gcpSystem -> googleIdentityProviderSystem "Authenticates users using"
+        gcpSystem -> identityproviders "Authenticates users using"
 
         buser -> gcpSystem.webDashboard "Compares sustainability impacts and cost breakdowns using"
         suser -> gcpSystem.webDashboard "Computes reports, creates portfolios of configurations using"
@@ -122,13 +158,15 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
         gcpSystem.backendAPI -> electricityMapsSystem "Makes API Calls to" "JSON/HTTPS"
         gcpSystem.backendAPI -> boaviztaSystem "Uses static data from" "CSV files"
 
-        gcpSystem.backendAPI.costsProviderService -> cache.cacheSystem "Fetches cached data" "redis-py client"
+        gcpSystem.backendAPI.costsProviderService -> cache.cacheSystem "Fetches cached data" "pymongo client"
         gcpSystem.backendAPI.costsProviderService -> electricityMapsSystem "Makes API calls to" "JSON/HTTPS"
 
         gcpSystem.backendAPI.sustainabilityProvider -> fileSystem "Uses stored data from" "CSV/YAML/JSON"
 
         gcpSystem.backendAPI.electricityRouter -> gcpSystem.backendAPI.costsProviderService "Computes electricity costs"
         gcpSystem.backendAPI.electricityRouter -> gcpSystem.backendAPI.carbonIntensityProvider "Computes power breakdown"
+        gcpSystem.backendAPI.electricityRouter -> gcpSystem.backendAPI.carbonFreeEnergyProvider "Computes free energy percentage"
+        gcpSystem.backendAPI.electricityRouter -> gcpSystem.backendAPI.renewableEnergyProvider "Computes renewable energy percentage"
 
         gcpSystem.backendAPI.authRouter -> gcpSystem.backendAPI.googleAuthService "OAuth2 using"
 
@@ -145,7 +183,12 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
         gcpSystem.backendAPI.sustainabilityRouter -> gcpSystem.backendAPI.configurationService "Get configuration"
         gcpSystem.backendAPI.sustainabilityRouter -> gcpSystem.backendAPI.sustainabilityProvider "Calculate impacts"
 
-        gcpSystem.backendAPI.costsRouter -> gcpSystem.backendAPI.costsProviderService "Compute usage costs"
+        gcpSystem.backendAPI.costsRouter -> gcpSystem.backendAPI.cloudPricingProvider "Compute cloud operating usage costs"
+
+        gcpSystem.backendAPI.currencyRouter -> gcpSystem.backendAPI.currencyConversionProvider "Convert currencies"
+        gcpSystem.backendAPI.currencyRouter -> frankfurterCurrencySystem "Makes API Calls to" "JSON/HTTPS"
+
+        gcpSystem.backendAPI.wizardRouter -> gcpSystem.backendAPI.wizardService "Execute green cloud practices"
 
         gcpSystem.backendAPI.cacheService -> cache.cacheSystem "Cache results"
         gcpSystem.backendAPI.cacheService -> cache.cacheSystem.scheduler "Schedule API Calls"
@@ -154,8 +197,8 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
 
         gcpSystem.webDashboard -> gcpSystem.backendAPI.electricityRouter "Makes API calls to" "JSON/HTTPS"
 
-        gcpSystem.webDashboard -> googleIdentityProviderSystem "Requests authentication"
-        googleIdentityProviderSystem -> gcpSystem.webDashboard "Authenticates user and gives the authorization code"
+        gcpSystem.webDashboard -> identityproviders "Requests authentication"
+        identityproviders -> gcpSystem.webDashboard "Authenticates user and gives the authorization code"
         gcpSystem.webDashboard -> gcpSystem.backendAPI.authRouter "Authenticate user using the authorization code"
         gcpSystem.backendAPI.authRouter -> gcpSystem.webDashboard "Generates access-token and sends it"
     }
@@ -185,6 +228,11 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
             autolayout lr
         }
 
+        container identityproviders "Identity_Providers" "The container view of the Identity Providers" {
+            include *
+            autolayout lr
+        }
+
         # =========================================================
         # DYNAMIC VIEWS
         # =========================================================
@@ -197,8 +245,8 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
         }
 
         dynamic gcpSystem.backendAPI "Authentication_Flow" "Authentication Flow" {
-            gcpSystem.webDashboard -> googleIdentityProviderSystem "Requests authentication"
-            googleIdentityProviderSystem -> gcpSystem.webDashboard "Authenticates user and gives the authorization code"
+            gcpSystem.webDashboard -> identityproviders "Requests authentication"
+            identityproviders -> gcpSystem.webDashboard "Authenticates user and gives the authorization code"
             gcpSystem.webDashboard -> gcpSystem.backendAPI.authRouter "Authenticate user using the authorization code"
             gcpSystem.backendAPI.authRouter -> gcpSystem.webDashboard "Generates access-token and sends it"
             autolayout lr
