@@ -7,6 +7,7 @@ import logging
 import json
 from datetime import datetime
 
+from boaviztapi import config
 from boaviztapi.model.crud_models.configuration_model import CloudConfigurationModel, OnPremiseConfigurationModel, \
     CloudServerUsage
 from boaviztapi.service.archetype import get_cloud_instance_archetype
@@ -14,6 +15,7 @@ from boaviztapi.service.cloud_provider import get_cloud_instance_types
 from boaviztapi.service.electricity_maps.carbon_intensity_provider import CarbonIntensityProvider
 from boaviztapi.service.cloud_pricing_provider import _estimate_localisation, AWSPriceProvider, AzurePriceProvider, \
     GcpPriceProvider
+from boaviztapi.service.sustainability_provider import get_cloud_impact
 
 from boaviztapi.service.utils_provider import data_dir
 from boaviztapi.utils.costs_calculator import CostCalculator, CurrencyConvertedCostBreakdown
@@ -144,6 +146,15 @@ async def _get_cloud_costs_for_instance(input_config: CloudConfigurationModel) -
     cost_results = cost_results.model_dump(exclude_none=True)
     return cost_results
 
+def _try_impact_extraction(impacts: dict, key: str):
+    if impacts is None:
+        return 0.0
+    try:
+        if key in impacts:
+            impact = impacts[key]
+            return impact['use']['value']
+    except KeyError:
+        return 0.0
 
 async def strategy_right_sizing(input_config: CloudConfigurationModel, provider_name: str) -> CloudConfigurationModel:
     provider_name = provider_name.strip().lower()
@@ -159,7 +170,8 @@ async def strategy_right_sizing(input_config: CloudConfigurationModel, provider_
 
     # Get the current usage load
     if input_config.usage.serverLoadAdvanced:
-        current_load = np.average([slot.load for slot in input_config.usage.serverLoadAdvanced])
+        load_obj = input_config.usage.serverLoadAdvanced
+        current_load = np.average([load_obj.slot1.load, load_obj.slot2.load, load_obj.slot3.load])
     else:
         current_load = input_config.usage.serverLoad
 
@@ -201,28 +213,56 @@ async def strategy_right_sizing(input_config: CloudConfigurationModel, provider_
     if len(filtered_configs) == 0:
         raise ValueError(f"No cloud configuration found for provider {provider_name} that matches the given criteria!")
 
-    # There are more configs, use pricing as a tiebreaker
+    # There are more configs, use pricing and impacts as a tiebreaker
+    final_duration = getattr(input_config.usage, "lifespan", 1) # Final duration for the lifespan
     for index, row in filtered_configs.iterrows():
         try:
             temp_config = input_config.model_copy(deep=True)
+            if input_config.cloud_provider != provider_name:
+                # If the resulting config is from another provider, switch back to default pricing types for compatibility
+                temp_config.usage.instancePricingType = _get_pricing_type(provider_name, temp_config.instance_type)[0]
+                temp_config.usage.reservedPlan = _get_pricing_type(provider_name, temp_config.instance_type)[1]
+            temp_config.cloud_provider = provider_name
             temp_config.instance_type = row['id']
+            impacts = await get_cloud_impact(temp_config, False, final_duration, config["default_criteria"])
+            impacts = getattr(impacts, "impacts", None)
+            gwp = _try_impact_extraction(impacts, "gwp")
+            pe = _try_impact_extraction(impacts, "pe")
+            adp = _try_impact_extraction(impacts, "adp")
+            print("where the fuck are you?", gwp, pe, adp)
+            filtered_configs.at[index, 'gwp'] = gwp
+            filtered_configs.at[index, 'pe'] = pe
+            filtered_configs.at[index, 'adp'] = adp
+
             costs = await _get_cloud_costs_for_instance(temp_config)
             filtered_configs.at[index, 'estimated_cost'] = costs['eur']['total_cost']
-        except Exception:
-            filtered_configs.at[index, 'estimated_cost'] = 0.0
 
+        except Exception as e:
+            print(e)
+            filtered_configs.at[index, 'estimated_cost'] = 0.0
+            filtered_configs.at[index, 'gwp'] = 0.0
+            filtered_configs.at[index, 'pe'] = 0.0
+            filtered_configs.at[index, 'adp'] = 0.0
+    print(filtered_configs)
     if 'estimated_cost' in filtered_configs.columns:
-        filtered_configs = filtered_configs.sort_values(by=['estimated_load', 'estimated_cost'], ascending=[False, True])
+        filtered_configs = filtered_configs.sort_values(by=['estimated_cost', 'estimated_load', "gwp", "pe", "adp"], ascending=[True, False, True, True, True])
 
     best_match = filtered_configs.iloc[0]
     result_config = input_config.model_copy(deep=True)
+
     result_config.cloud_provider = provider_name
     if result_config.usage.serverLoad:
         result_config.usage.serverLoad = best_match['estimated_load']
     if result_config.usage.serverLoadAdvanced:
-        for slot in result_config.usage.serverLoadAdvanced:
+        load_obj = result_config.usage.serverLoadAdvanced
+        for slot in [load_obj.slot1, load_obj.slot2, load_obj.slot3]:
             slot.load = best_match['estimated_load']
+
     result_config.instance_type = best_match['id']
+    if input_config.cloud_provider != provider_name:
+        # If the resulting config is from another provider, switch back to default pricing types for compatibility
+        result_config.usage.instancePricingType = _get_pricing_type(provider_name, result_config.instance_type)[0]
+        result_config.usage.reservedPlan = _get_pricing_type(provider_name, result_config.instance_type)[1]
 
     return result_config
 

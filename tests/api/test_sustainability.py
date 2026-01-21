@@ -41,14 +41,14 @@ azure_cloud_config = {
             "name": "Development Cloud",
             "created": "2023-01-01T00:00:00.000Z",
             "cloud_provider": "azure",
-            "instance_type": "e2ads_v5",
+            "instance_type": "standard_d32ds_v4",
             "user_id": "1234567890",
             "usage": {
-                "localisation": "NL",
+                "localisation": "DE",
                 "lifespan": 100,
                 "method": "Load",
                 "serverLoad": 100,
-                "instancePricingType": "OnDemand",
+                "instancePricingType": "LinuxOnDemand",
                 "reservedPlan": "yrTerm1Savings.allUpfront"
             }
         }
@@ -135,6 +135,7 @@ async def test_post_results_cloud_configuration(data_regression, cloud_config):
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         res = await ac.post('/v1/sustainability/cloud?verbose=true&costs=true', json=cloud_config)
+    print(res.json())
     assert res.status_code == 200
     data_regression.check(data_dict=res.json(), round_digits=1)
 

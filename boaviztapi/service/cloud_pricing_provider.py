@@ -159,15 +159,23 @@ class AzurePriceProvider:
         self.savings_types = self.azure_prices.index.get_level_values('saving').unique().tolist()
         self.instance_ids = self.azure_prices.index.get_level_values('id').unique().tolist()
 
+    # @classmethod
+    # def normalise_instance_id(cls, instance_id: str):
+    #     """
+    #     Normalise archetype instance_id to match the pricing map instance_ids
+    #     e.g. "standard_d32ds_v4" -> "d32dsv4"
+    #     """
+    #     instance_id = instance_id.replace('standard', '')
+    #     instance_id = instance_id.replace('_', '')
+    #     return instance_id.lower().strip()
+
     @classmethod
-    def normalise_instance_id(cls, instance_id: str):
+    def get_archetype(cls, pricing_instance_id: str):
         """
-        Normalise archetype instance_id to match the pricing map instance_ids
-        e.g. "standard_d32ds_v4" -> "d32dsv4"
+        Get the archetype data for an instance id originating from the pricing dataset.
+        e.g. "d32dsv4" -> archetype for ("standard_d32ds_v4")
         """
-        instance_id = instance_id.replace('standard', '')
-        instance_id = instance_id.replace('_', '')
-        return instance_id.lower().strip()
+
 
     def _df_to_pydantic(self, df: pd.DataFrame, region: str, instance_id: str, saving: str | None = None) -> list[
         AzurePriceModel]:
@@ -187,7 +195,7 @@ class AzurePriceProvider:
 
     def get_all(self, region: str, instance_id: str) -> list[AzurePriceModel]:
         region = region.lower().strip()
-        instance_id = self.normalise_instance_id(instance_id)
+        instance_id = instance_id.lower().strip()
         if region not in self.regions:
             raise ValueError(f"Region {region} is not a valid Azure region!")
         if instance_id not in self.instance_ids:
@@ -197,7 +205,7 @@ class AzurePriceProvider:
     def get_prices_with_saving(self, region: str, instance_id: str, savings_type: str) -> list[AzurePriceModel]:
         region = region.lower().strip()
         savings_type = savings_type.strip()
-        instance_id = self.normalise_instance_id(instance_id)
+        instance_id = instance_id.lower().strip()
         if region not in self.regions:
             raise ValueError(f"Region {region} is not a valid Azure region!")
         if savings_type not in self.savings_types:
@@ -208,7 +216,7 @@ class AzurePriceProvider:
         return self._df_to_pydantic(df=self.azure_prices.xs((region, savings_type, instance_id), level=('region', 'saving', 'id')), region=region, saving=savings_type, instance_id=instance_id)
 
     def get_regions_for_instance(self, instance_id: str):
-        instance_id = self.normalise_instance_id(instance_id)
+        instance_id = instance_id.lower().strip()
         if instance_id not in self.instance_ids:
             raise ValueError(f"Instance {instance_id} is not a valid AWS instance!")
         return self.azure_prices.xs(instance_id, level='id').index.get_level_values('region').unique().tolist()
