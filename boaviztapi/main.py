@@ -9,10 +9,13 @@ from typing import AsyncIterator
 import anyio
 import markdown
 import uvicorn
+import math
+import numpy as np
+from typing import Any
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
 from mangum import Mangum
@@ -45,6 +48,43 @@ from boaviztapi.routers.peripheral_router import peripheral_router
 from boaviztapi.routers.server_router import server_router
 from boaviztapi.routers.terminal_router import terminal_router
 from boaviztapi.routers.utils_router import utils_router
+
+
+def _sanitize_json_floats(obj: Any) -> Any:
+    """
+    Recursively convert NaN / +/-Inf (including NumPy scalar floats) to None,
+    so responses stay valid JSON and Starlette serialization won't 500.
+    """
+    if obj is None:
+        return None
+
+    # Handle NumPy scalar types (e.g. numpy.float64)
+    if np is not None:
+        try:
+            if isinstance(obj, np.generic):
+                obj = obj.item()
+        except Exception:
+            pass
+
+    if isinstance(obj, float):
+        return obj if math.isfinite(obj) else None
+
+    if isinstance(obj, dict):
+        return {k: _sanitize_json_floats(v) for k, v in obj.items()}
+
+    if isinstance(obj, (list, tuple)):
+        return [_sanitize_json_floats(v) for v in obj]
+
+    return obj
+
+
+class SanitizedJSONResponse(JSONResponse):
+    """
+    JSONResponse variant that sanitises non-JSON-compliant floats (NaN/Inf)
+    into nulls before rendering.
+    """
+    def render(self, content: Any) -> bytes:
+        return super().render(_sanitize_json_floats(content))
 
 logging.basicConfig(
     level=logging.INFO,
@@ -80,7 +120,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 # We have to manage it to expose openapi doc on aws and generate proper links.
 stage = os.environ.get('STAGE', None)
 openapi_prefix = f"/{stage}" if stage else "/"
-app = FastAPI(lifespan=lifespan, root_path=openapi_prefix)  # Here is the magic
+app = FastAPI(lifespan=lifespan, root_path=openapi_prefix, default_response_class=SanitizedJSONResponse)  # Here is the magic
 origins = json.loads(os.getenv("ALLOWED_ORIGINS", '["*"]'))
 version = get_version_from_pyproject()
 ctx = get_app_context()
