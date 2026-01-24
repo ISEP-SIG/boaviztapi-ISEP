@@ -229,21 +229,53 @@ async def strategy_right_sizing(input_config: CloudConfigurationModel, provider_
             gwp = _try_impact_extraction(impacts, "gwp")
             pe = _try_impact_extraction(impacts, "pe")
             adp = _try_impact_extraction(impacts, "adp")
-            print("where the fuck are you?", gwp, pe, adp)
             filtered_configs.at[index, 'gwp'] = gwp
             filtered_configs.at[index, 'pe'] = pe
             filtered_configs.at[index, 'adp'] = adp
 
             costs = await _get_cloud_costs_for_instance(temp_config)
             filtered_configs.at[index, 'estimated_cost'] = costs['eur']['total_cost']
+            filtered_configs.at[index, 'energy_cost'] = costs['eur']['breakdown']['energy_costs']
+            filtered_configs.at[index, 'operating_cost'] = costs['eur']['breakdown']['operating_costs']
+
 
         except Exception as e:
-            print(e)
+            log.error(e)
             filtered_configs.at[index, 'estimated_cost'] = 0.0
             filtered_configs.at[index, 'gwp'] = 0.0
             filtered_configs.at[index, 'pe'] = 0.0
             filtered_configs.at[index, 'adp'] = 0.0
-    print(filtered_configs)
+            filtered_configs.at[index, 'energy_cost'] = 0.0
+            filtered_configs.at[index, 'operating_cost'] = 0.0
+
+
+    # Exclude configs which don't have the same cost types as the input config
+    input_config_costs = await _get_cloud_costs_for_instance(input_config)
+
+    input_breakdown = input_config_costs.get('eur', {}).get('breakdown', {})
+    input_energy = input_breakdown.get('energy_costs')
+    input_operating = input_breakdown.get('operating_costs')
+
+    input_has_energy = input_energy is not None and not np.isnan(input_energy) and input_energy != 0.0
+    input_has_operating = input_operating is not None and not np.isnan(input_operating) and input_operating != 0.0
+
+    if input_has_energy:
+        energy_mask = (filtered_configs['energy_cost'].notna()) & (filtered_configs['energy_cost'] != 0.0)
+    else:
+        energy_mask = (filtered_configs['energy_cost'].isna()) | (filtered_configs['energy_cost'] == 0.0)
+
+    if input_has_operating:
+        operating_mask = (filtered_configs['operating_cost'].notna()) & (filtered_configs['operating_cost'] != 0.0)
+    else:
+        operating_mask = (filtered_configs['operating_cost'].isna()) | (filtered_configs['operating_cost'] == 0.0)
+
+    mask = energy_mask & operating_mask
+    filtered_configs = filtered_configs[mask]
+
+    if len(filtered_configs) == 0:
+        raise RuntimeError("No configuration matches the given criteria!")
+
+    # Sort the final results based on the 5 attributes in the 'by' parameter
     if 'estimated_cost' in filtered_configs.columns:
         filtered_configs = filtered_configs.sort_values(by=['estimated_cost', 'estimated_load', "gwp", "pe", "adp"], ascending=[True, False, True, True, True])
 
