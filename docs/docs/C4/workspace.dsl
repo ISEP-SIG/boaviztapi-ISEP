@@ -128,7 +128,7 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
         fileSystem = softwareSystem "File System" "CSV/YAML/JSON Files from multiple sources including scrapers" {
             tags "File System"
         }
-        vantageSystem = softwareSystem "Vantage Cloud Provider Comparison API" "Allows clients to compare instances offered by multiple cloud providers" {
+        vantageSystem = softwareSystem "Vantage Open-Source Fork Data Dump" "Contains data regarding cloud instance pricing from various providers" {
             tags "External System"
         }
         electricityMapsSystem = softwareSystem "ElectricityMaps API" "Allows clients to compare electricity sources (fossils vs hydro) in real time" {
@@ -177,6 +177,9 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
 
         gcpSystem.backendAPI.portfolioRouter -> gcpSystem.backendAPI.portfolioService "Database Access Layer"
 
+        gcpSystem.backendAPI.portfolioService -> databaseSystem "Stores/Retrieves Portfolio Data" "pymongo"
+        gcpSystem.backendAPI.configurationService -> databaseSystem "Stores/Retrieves Configuration Data" "pymongo"
+
         gcpSystem.backendAPI.userRouter -> gcpSystem.backendAPI.configurationService "Get user configurations"
         gcpSystem.backendAPI.userRouter -> gcpSystem.backendAPI.portfolioService "Get user portfolios"
 
@@ -184,9 +187,13 @@ workspace "SIG - Green Cloud Practices" "The Green Cloud Practices system repres
         gcpSystem.backendAPI.sustainabilityRouter -> gcpSystem.backendAPI.sustainabilityProvider "Calculate impacts"
 
         gcpSystem.backendAPI.costsRouter -> gcpSystem.backendAPI.cloudPricingProvider "Compute cloud operating usage costs"
+        gcpSystem.backendAPI.cloudPricingProvider -> fileSystem "Uses stored data from" "CSV/Parquet"
 
         gcpSystem.backendAPI.currencyRouter -> gcpSystem.backendAPI.currencyConversionProvider "Convert currencies"
-        gcpSystem.backendAPI.currencyRouter -> frankfurterCurrencySystem "Makes API Calls to" "JSON/HTTPS"
+        gcpSystem.backendAPI.currencyConversionProvider -> frankfurterCurrencySystem "Makes API Calls to" "JSON/HTTPS"
+        gcpSystem.backendAPI.currencyConversionProvider -> cache.cacheSystem "Fetches cached data" "pymongo client"
+
+        gcpSystem.backendAPI.utilsProvider -> fileSystem "Interacts with data from" "CSV/JSON/YAML/Parquet"
 
         gcpSystem.backendAPI.wizardRouter -> gcpSystem.backendAPI.wizardService "Execute green cloud practices"
 
