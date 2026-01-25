@@ -5,6 +5,7 @@ from datetime import datetime, timezone, timedelta
 import pandas as pd
 import requests
 import xmltodict
+import re
 
 from boaviztapi import data_dir
 from boaviztapi.application_context import get_app_context
@@ -56,13 +57,25 @@ class ElectricityCostsProvider(ElectricityMapsService):
             APIAuthenticationError: When the API key is not authorized to access this resource
             APIError: When the API returns an unexpected response status code, or it cannot be reached
         """
-        if temporalGranularity.lower() != 'hourly':
-            raise APIError("Please use the /prices endpoint for other temporal granularity parameters than 'hourly'.")
-        url = f"{ElectricityMapsService.base_url}/price-day-ahead/latest?zone={zone}&temporalGranularity={temporalGranularity}"
-        cached_results = await ElectricityCostsProvider.get_cache_scheduler(temporalGranularity).get_results()
-        if cached_results and url in cached_results:
-            return cached_results[url]
-        return ElectricityMapsService._perform_request(url)
+        if temporalGranularity.lower() == 'hourly':
+            url = f"{ElectricityMapsService.base_url}/price-day-ahead/latest?zone={zone}&temporalGranularity={temporalGranularity}"
+            cached_results = await ElectricityCostsProvider.get_cache_scheduler(temporalGranularity).get_results()
+            if cached_results and url in cached_results:
+                return cached_results[url]
+            return ElectricityMapsService._perform_request(url)
+        elif temporalGranularity.lower() == 'yearly':
+            datetime_parameter = (datetime.now() - timedelta(seconds=temporal_granularity_to_ttl(temporalGranularity))).strftime("%Y-%m-%dT%H:%M:00Z")
+            url = f"{ElectricityMapsService.base_url}/price-day-ahead/past?zone={zone}&datetime={datetime_parameter}&temporalGranularity={temporalGranularity}"
+            cached_results = await ElectricityCostsProvider.get_cache_scheduler(temporalGranularity).get_results()
+            if cached_results:
+                pattern = re.compile(rf"zone={re.escape(zone)}&")
+                for key in cached_results.keys():
+                    if pattern.search(key):
+                        return cached_results[key]
+            return ElectricityMapsService._perform_request(url)
+        else:
+            raise APIError("Please use the /prices endpoint for other temporal granularity parameters than 'hourly' or 'yearly'.")
+
 
     @staticmethod
     def get_price_for_country(alpha3: str) -> dict | None:
