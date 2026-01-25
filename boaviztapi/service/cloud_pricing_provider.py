@@ -309,12 +309,18 @@ class GcpPriceProvider:
         return self.gcp_prices.xs(instance_id, level='id').index.get_level_values('region').unique().tolist()
 
     def get_instance_pricing_types_for_instance(self, instance_id: str, localisation: str):
-        region = _estimate_localisation(localisation, "gcp")
+        region = _estimate_cloud_region(localisation, "gcp")
         instance_id = instance_id.lower().strip()
+        print(region)
         if instance_id not in self.instance_ids:
             raise ValueError(f"Instance {instance_id} is not a valid GCP instance!")
+        if region not in self.regions:
+            print("not good")
+            raise ValueError(f"Region {region} is not a valid GCP region!")
         df = self.gcp_prices.xs((region, instance_id), level=('region', 'id'))
-        return df.columns[df.notna().any()].tolist()
+        columns = df.columns[df.notna().any()].tolist()
+        excluded = ["Instance Name","Instance Memory","vCPUs"]
+        return [col for col in columns if col not in excluded]
 
 
 

@@ -52,7 +52,7 @@ async def get_cloud_instance_usage(
 async def get_cloud_instance_pricing_type(
         provider: str = Query(config["default_cloud_provider"], example=config["default_cloud_provider"]),
         instance_type: str = Query(config["default_cloud_instance"], example=config["default_cloud_instance"]),
-        reserve_type: str = Query(config["default_cloud_reservetypes"], example=config["default_cloud_reservetype"]),
+        reserve_type: str | None = Query(None, example=config["default_cloud_reservetype"]),
         localisation: str = Query(["FR", "NL", "DE"], example="NL")):
     return utils_provider.get_instance_reserve_types(provider, instance_type, reserve_type, localisation)
 
