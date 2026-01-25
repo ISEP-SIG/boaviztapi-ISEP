@@ -1,7 +1,7 @@
 <div style="display: flex; justify-content: space-between; gap: 10px;">
-    <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/blob/main/boaviztapi_color.svg" height="100" alt="BoaviztAPI">
-    <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/blob/main/electricitymaps_logo.avif" height="100" alt="ElectricityMaps">
-    <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/blob/main/leaner_cloud_logo.png" height="100" alt="LeanerCloud">
+    <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/blob/main/boaviztapi_color.svg" height="100" width="100" alt="BoaviztAPI">
+    <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/blob/main/electricitymaps_logo.avif" height="100" width="100" alt="ElectricityMaps">
+    <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/blob/main/leaner_cloud_logo.png" height="100" width="100" alt="LeanerCloud">
 </div>
 
 <h3 align="center">
@@ -170,7 +170,11 @@ make docker-run-development
 
 ### OpenAPI specification (Swagger)
 
-Once API server is launched API swagger is available at [httsp://localhost:5000/docs](https://localhost:5000/docs).
+Once API server is launched API swagger is available at [https://localhost:5000/docs](https://localhost:5000/docs).
+
+## 🔒 Authentication settings
+Our backend and frontend use an OAuth-based authentication method. To find out more information on how to use these
+authentication methods on your own deployment, please check out this documentation file: [oauth.md](docs/docs/oauth.md)
 
 ## :scroll: License
 
