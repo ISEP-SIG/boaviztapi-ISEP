@@ -5,13 +5,41 @@ default_ram: "DEFAULT"
 default_ssd: "DEFAULT"
 default_hdd: "DEFAULT"
 default_power_supply: "DEFAULT"
-default_case: "DEFAULT"
+default_case: "rack"
 default_assembly: "DEFAULT"
 default_motherboard: "DEFAULT"
-default_server: "DEFAULT"
+
+default_server: "platform_compute_medium"
 
 default_cloud_instance: "a1.4xlarge"
 default_cloud_provider: "aws"
+default_cloud_reservetype: "yrTerm1Standard.allUpfront"
+default_cloud_reservetypes: {
+  "aws": [
+    "yrTerm1Standard.noUpfront",
+    "yrTerm1Standard.partialUpfront",
+    "yrTerm1Standard.allUpfront",
+    "yrTerm3Standard.noUpfront",
+    "yrTerm3Standard.partialUpfront",
+    "yrTerm3Standard.allUpfront",
+    "yrTerm1Convertible.noUpfront",
+    "yrTerm1Convertible.partialUpfront",
+    "yrTerm1Convertible.allUpfront",
+    "yrTerm3Convertible.noUpfront",
+    "yrTerm3Convertible.partialUpfront",
+    "yrTerm3Convertible.allUpfront"
+  ],
+  "azure": [
+    "yrTerm1Savings.allUpfront",
+    "yrTerm1Standard.allUpfront",
+    "yrTerm1Standard.hybridbenefit",
+    "yrTerm3Savings.allUpfront",
+    "yrTerm3Savings.hybridbenefit",
+    "yrTerm3Standard.allUpfront",
+    "yrTerm3Standard.hybridbenefit"
+  ],
+  "gcp": []
+}
 
 default_laptop: "laptop-pro"
 default_desktop: "desktop-pro"
@@ -37,4 +65,4 @@ uncertainty: 10
 max_sig_fig: 4
 min_sig_fig: 1
 
-cpu_name_fuzzymatch_threshold: 60
+cpu_name_fuzzymatch_threshold: 80
