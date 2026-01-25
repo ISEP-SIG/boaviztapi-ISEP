@@ -5,11 +5,10 @@ default_ram: "DEFAULT"
 default_ssd: "DEFAULT"
 default_hdd: "DEFAULT"
 default_power_supply: "DEFAULT"
-default_case: "rack"
+default_case: "DEFAULT"
 default_assembly: "DEFAULT"
 default_motherboard: "DEFAULT"
-
-default_server: "platform_compute_medium"
+default_server: "DEFAULT"
 
 default_cloud_instance: "a1.4xlarge"
 default_cloud_provider: "aws"
@@ -40,7 +39,6 @@ default_cloud_reservetypes: {
   ],
   "gcp": []
 }
-
 default_laptop: "laptop-pro"
 default_desktop: "desktop-pro"
 default_smartphone: "smartphone-default"
@@ -65,4 +63,4 @@ uncertainty: 10
 max_sig_fig: 4
 min_sig_fig: 1
 
-cpu_name_fuzzymatch_threshold: 80
+cpu_name_fuzzymatch_threshold: 60
