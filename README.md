@@ -184,7 +184,7 @@ Once API server is launched API swagger is available at [https://localhost:5000/
 
 ## 🔒 Authentication settings
 Our backend and frontend use an OAuth-based authentication method. To find out more information on how to use these
-authentication methods on your own deployment, please check out this documentation file: [oauth.md](docs/oauth.md)
+authentication methods on your own deployment, please check out this documentation file: [oauth.md](docs/docs/oauth.md)
 
 ## :scroll: License
 
