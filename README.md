@@ -180,7 +180,11 @@ make docker-run-development
 
 ### OpenAPI specification (Swagger)
 
-Once API server is launched API swagger is available at [httsp://localhost:5000/docs](https://localhost:5000/docs).
+Once API server is launched API swagger is available at [https://localhost:5000/docs](https://localhost:5000/docs).
+
+## 🔒 Authentication settings
+Our backend and frontend use an OAuth-based authentication method. To find out more information on how to use these
+authentication methods on your own deployment, please check out this documentation file: [oauth.md](docs/oauth.md)
 
 ## :scroll: License
 
