@@ -69,6 +69,20 @@ def get_regions_for_instance(provider: str, instance_id: str) -> list[str]:
 
     raise ValueError(f"Unsupported cloud provider: {provider}")
 
+def get_pricing_types_for_instance(provider: str, instance_id: str, saving: str | None = None) -> list[str]:
+    provider = provider.lower().strip()
+
+    if provider == "aws":
+        return AWSPriceProvider().get_instance_pricing_types_for_instance(instance_id, saving)
+
+    if provider == "azure":
+        return AzurePriceProvider().get_instance_pricing_types_for_instance(instance_id, saving)
+
+    if provider == "gcp":
+        return GcpPriceProvider().get_instance_pricing_types_for_instance(instance_id)
+
+    raise ValueError(f"Unsupported cloud provider: {provider}")
+
 def get_localisations_for_instance(provider: str, instance_id: str, all_zones: list) -> set[str]:
     regions = get_regions_for_instance(provider, instance_id)
 
@@ -142,6 +156,21 @@ class AWSPriceProvider:
         if instance_id not in self.instance_ids:
             raise ValueError(f"Instance {instance_id} is not a valid AWS instance!")
         return self.aws_prices.xs(instance_id, level='id').index.get_level_values('region').unique().tolist()
+
+    def get_instance_pricing_types_for_instance(self, instance_id: str, localisation: str, saving: str | None = None):
+        region = _estimate_cloud_region(localisation, "aws")
+        instance_id = instance_id.lower().strip()
+        if instance_id not in self.instance_ids:
+            raise ValueError(f"Instance {instance_id} is not a valid AWS instance!")
+        if region not in self.regions:
+            raise ValueError(f"Region {region} is not a valid AWS region!")
+        if saving:
+            if saving not in self.savings_types:
+                raise ValueError(f"Savings type {saving} is not a valid AWS savings type!")
+            df = self.aws_prices.xs((instance_id, saving, region), level=('id', 'saving', 'region'))
+        else:
+            df = self.aws_prices.xs(instance_id, level='id')
+        return df.columns[df.notna().any()].tolist()
 
 class AzurePriceProvider:
     _instance = None
@@ -218,8 +247,23 @@ class AzurePriceProvider:
     def get_regions_for_instance(self, instance_id: str):
         instance_id = instance_id.lower().strip()
         if instance_id not in self.instance_ids:
-            raise ValueError(f"Instance {instance_id} is not a valid AWS instance!")
+            raise ValueError(f"Instance {instance_id} is not a valid Azure instance!")
         return self.azure_prices.xs(instance_id, level='id').index.get_level_values('region').unique().tolist()
+
+    def get_instance_pricing_types_for_instance(self, instance_id: str, localisation: str,  saving: str | None = None):
+        region = _estimate_cloud_region(localisation, "azure")
+        instance_id = instance_id.lower().strip()
+        if instance_id not in self.instance_ids:
+            raise ValueError(f"Instance {instance_id} is not a valid Azure instance!")
+        if region not in self.regions:
+            raise ValueError(f"Region {region} is not a valid Azure region!")
+        if saving:
+            if saving not in self.savings_types:
+                raise ValueError(f"Savings type {saving} is not a valid Azure savings type!")
+            df = self.azure_prices.xs((instance_id, saving, region), level=('id', 'saving', 'region'))
+        else:
+            df = self.azure_prices.xs(instance_id, level='id')
+        return df.columns[df.notna().any()].tolist()
 
 
 class GcpPriceProvider:
@@ -261,8 +305,17 @@ class GcpPriceProvider:
     def get_regions_for_instance(self, instance_id: str):
         instance_id = instance_id.lower().strip()
         if instance_id not in self.instance_ids:
-            raise ValueError(f"Instance {instance_id} is not a valid AWS instance!")
+            raise ValueError(f"Instance {instance_id} is not a valid GCP instance!")
         return self.gcp_prices.xs(instance_id, level='id').index.get_level_values('region').unique().tolist()
+
+    def get_instance_pricing_types_for_instance(self, instance_id: str, localisation: str):
+        region = _estimate_localisation(localisation, "gcp")
+        instance_id = instance_id.lower().strip()
+        if instance_id not in self.instance_ids:
+            raise ValueError(f"Instance {instance_id} is not a valid GCP instance!")
+        df = self.gcp_prices.xs((region, instance_id), level=('region', 'id'))
+        return df.columns[df.notna().any()].tolist()
+
 
 
 

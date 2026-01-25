@@ -1,7 +1,9 @@
 import random
+from typing import Annotated
 
 from fastapi import APIRouter, Query
 from fastapi_cache.decorator import cache
+from pydantic import AfterValidator
 
 import boaviztapi.service.cloud_provider as cloud_provider
 import boaviztapi.service.utils_provider as utils_provider
@@ -44,6 +46,16 @@ async def get_cloud_instance_usage(
     response["details"] = "WARNING: THIS DATA IS SYNTHETICALLY GENERATED FOR MOCK-UP PURPOSES."
     response["instance_pricing_types"] = _get_synthetic_costs()
     return response
+
+@options_router.get('/cloud/pricing_type', description="Return the available instance pricing and reserve cost types for an instance and provider")
+@cache(expire=60 * 60 * 24)
+async def get_cloud_instance_pricing_type(
+        provider: str = Query(config["default_cloud_provider"], example=config["default_cloud_provider"]),
+        instance_type: str = Query(config["default_cloud_instance"], example=config["default_cloud_instance"]),
+        reserve_type: str = Query(config["default_cloud_reservetypes"], example=config["default_cloud_reservetype"]),
+        localisation: str = Query(["FR", "NL", "DE"], example="NL")):
+    return utils_provider.get_instance_reserve_types(provider, instance_type, reserve_type, localisation)
+
 
 
 @options_router.get('/localisation', description="Return the available locations for electricity cost estimation")
