@@ -46,3 +46,20 @@ def get_all_case_type():
 
 def get_all_impact_criteria():
     return impact.IMPACT_CRITERIAS
+
+def get_instance_reserve_types(provider: str, instance_id: str, reserve_type: str, localisation: str):
+    instance_pricing = []
+    try:
+        if provider == "aws":
+            from boaviztapi.service.cloud_pricing_provider import AWSPriceProvider
+            instance_pricing = AWSPriceProvider().get_instance_pricing_types_for_instance(instance_id,localisation, reserve_type)
+        if provider == "azure":
+            from boaviztapi.service.cloud_pricing_provider import AzurePriceProvider
+            instance_pricing = AzurePriceProvider().get_instance_pricing_types_for_instance(instance_id, localisation, reserve_type)
+        if provider == "gcp":
+            from boaviztapi.service.cloud_pricing_provider import GcpPriceProvider
+            instance_pricing = GcpPriceProvider().get_instance_pricing_types_for_instance(instance_id, localisation)
+    except Exception as e:
+        print(e)
+        return []
+    return instance_pricing

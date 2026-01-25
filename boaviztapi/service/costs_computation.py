@@ -20,7 +20,7 @@ async def get_electricity_price(model: Union[Component, Device], location: str =
     if not is_valid_zone_code(location):
         return {"error": f"Invalid zone code '{location}'!"}
 
-    return await ElectricityCostsProvider.get_price_for_country_elecmaps(location)
+    return await ElectricityCostsProvider.get_price_for_country_elecmaps(location, 'yearly')
 
 
 def is_valid_iso3country(country_code: str) -> bool:
