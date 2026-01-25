@@ -12,24 +12,46 @@ services:
           - mongodb
 
   backend:
+    image: ghcr.io/isep-sig/boaviztapi-isep:main
     restart: on-failure:2
-    pull_policy: always
-    build:
-      context: .
-      dockerfile: Dockerfile
-    env_file:
-      - path: .env.docker
-        required: true
     ports:
-      - "5000:5000"
-    expose:
-      - 5000
+      - "32770:5000"
     depends_on:
       - mongodb
     networks:
       - default
+    environment:
+      - ENTSOE_API_KEY=${ENTSOE_API_KEY}
+      - ELECTRICITYMAPS_API_KEY=${ELECTRICITYMAPS_API_KEY}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - SESSION_MIDDLEWARE_SECRET_KEY=${SESSION_MIDDLEWARE_SECRET_KEY}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+      - MONGODB_URL=${MONGODB_URL}
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
+      - PROD_ENVIRONMENT=${PROD_ENVIRONMENT}
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
+      - DISCORD_REDIRECT_URL=${DISCORD_REDIRECT_URL}
 
-
+  frontend:
+    image: ghcr.io/isep-sig/isep-frontend:main
+    restart: on-failure:2
+    ports:
+      - "3000:3000"
+    expose:
+      - 3000
+    depends_on:
+      - backend
+    networks:
+      - default
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - NEXT_PUBLIC_GOOGLE_LOGIN_URI=${NEXT_PUBLIC_GOOGLE_LOGIN_URI}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_DISCORD_LOGIN_URI=${NEXT_PUBLIC_DISCORD_LOGIN_URI}
+      - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+      - HOSTNAME=${HOSTNAME}
 
 volumes:
   mongodb_volume:

@@ -1,62 +1,105 @@
-<p align="center">
-    <img src="https://github.com/Boavizta/boaviztapi/blob/main/boaviztapi_color.svg" height="100" alt="BoaviztAPI">
-</p>
+<div style="display: flex; justify-content: space-between; gap: 10px;">
+    <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/blob/main/boaviztapi_color.svg" height="100" alt="BoaviztAPI">
+    <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/blob/main/electricitymaps_logo.avif" height="100" alt="ElectricityMaps">
+    <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/blob/main/leaner_cloud_logo.png" height="100" alt="LeanerCloud">
+</div>
 
 <h3 align="center">
-   An API to access <a href="https://boavizta.cmakers.io/">Boavizta's</a> methodologies and data</a>
+   An extended API based on <a href="https://boavizta.cmakers.io/">Boavizta's</a> methodologies and data, integrated with <a href="https://www.electricitymaps.com/">ElectricityMap's</a>
+   pricing and green energy API and <a href="https://github.com/LeanerCloud/ec2-instances-info">Leaner Cloud's Vantage based fork</a> for cloud instance pricing data
 </h3>
 
 ---
 
-See the [documentation](https://doc.api.boavizta.org/) for API usage and methodology.
+See the [documentation](https://doc.api.boavizta.org/) for <a href="https://boavizta.cmakers.io/">Boavizta's</a> API usage and methodology.
 
-[![Python tests](https://github.com/Boavizta/boaviztapi/actions/workflows/test.yml/badge.svg)](https://github.com/Boavizta/boaviztapi/actions/workflows/test.yml)
+[![Python tests](https://github.com/ISEP-SIG/boaviztapi-ISEP/actions/workflows/test.yml/badge.svg)](https://github.com/ISEP-SIG/boaviztapi-ISEP/actions/workflows/test.yml)
 
-💬 [Join us on our public chat](https://chat.boavizta.org/signup_user_complete/?id=97a1cpe35by49jdc66ej7ktrjc)
+<h3> Special thanks to the following projects </h3>
+
+💬 [Join Boavizta's community on their public chat](https://chat.boavizta.org/signup_user_complete/?id=97a1cpe35by49jdc66ej7ktrjc) <br>
+🤝🏼 [Contribute to Electricity Maps' open-source dashboard project](https://github.com/electricitymaps/electricitymaps-contrib) <br>
+🎉 [Special thanks to LeanerCloud for offering a data dump for cloud instance pricing](https://github.com/LeanerCloud/ec2-instances-info)
+---
+
 
 ## :dart: Objective
 
-Boavizta aims to enhance the assessment of environmental impacts induced by ICTs in organizations by providing widespread access to our work in an automated and efficient manner.
-
-Boavizta integrates various data and methodologies, which are combined and made accessible through this API.
-
-Transparency and the popularization of scientific knowledge are of utmost importance in this project, and key aspects include open-sourcing the code, versioning the impact factors, and thoroughly documenting the project.
-
-In the interest of transparency and scientific popularization, the opening of the code, the versioning of the impact factors and the documentation of the project are critical points.
-
-The system follows a bottom-up approach in its development, organized into layers. The initial layer focuses on equipment. The second layer focues on the impacts of digital services (e.g. cloud instances) or systems. However, assessing the overall global impact of ICT is currently beyond the project's scope.
+<b>Visit <a href=https://github.com/Boavizta/boaviztapi/tree/main>Boavizta's Github page</a> to explore their documentation and objective.</b>
 
 ## :fast_forward: Test it yourself (no installation)
 
-* See our pedagogical front-end app (using the API): <https://datavizta.boavizta.org/serversimpact>
+* See our front-end app (using the extended API): <https://isepfrontend.duckdns.org>
 
-* See the OpenAPI specification: <https://api.boavizta.org/docs>
-
-* [Documentation](https://doc.api.boavizta.org/)
-
-* Access the demo API: <https://api.boavizta.org>
+* See the OpenAPI specification: <https://isepbackend.duckdns.org>
 
 ## Run a local instance
 
-### :whale: Run API using docker
+### :whale: Run backend API using Docker Compose
+
+<p>The backend is available as a standalone docker container that exposes an OpenAPI documentation page and the
+REST API endpoints for all the features used in the dashboard. The backend requires an open MongoDB connection
+to store user configurations and portfolios.</p>
+
+```yaml
+services:
+
+  mongodb:
+    image: mongo:8.2.3
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_volume:/data/db
+    networks:
+      default:
+        aliases:
+          - mongodb
+
+  backend:
+    restart: on-failure:2
+    pull_policy: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - path: .env.docker
+        required: true
+    ports:
+      - "5000:5000"
+    expose:
+      - 5000
+    depends_on:
+      - mongodb
+    networks:
+      - default
+
+
+
+volumes:
+  mongodb_volume:
+
+networks:
+  default:
+
+```
+Use the above docker-compose file and start the services. Make sure to have a `.env` file with all the necessary
+API keys needed for the backend to function as expected. You can find an example environment file named `.env.sample`.
+The backend logs will specifically throw an error for each missing  environment variable, or it will shut down if no
+MongoDB connection is established.
 
 ```bash
-$ docker run -p 5000:5000 ghcr.io/boavizta/boaviztapi:latest
+docker compose up -d
 ```
+The backend will be accessible at <http://localhost:5000>
 
-Access the API at http://localhost:5000.
+### :whale: Run the entire application (backend, frontend and database) using Docker Compose
 
-### Install using pip package
-
-```bash
-$ pip3 install boaviztapi
-```
-
-Run the server locally with:
-
-```bash
-$ uvicorn boaviztapi.main:app --host=localhost --port 5000
-```
+<p>The backend API has an accompanying frontend. To run the entire application, use the Docker Compose script found
+in the repository. We recommend using Docker Swarm or Kubernetes Secrets to make all the necessary environment variables
+(for both frontend and backend) available to the services. They can also be inserted by setting system-wide environment
+variables on the hosting machine through a terminal. To see a list of the environment variables used also by the
+frontend, check the following file in the frontend repository:</p>
+<a href="https://github.com/ISEP-SIG/ISEP-Frontend/blob/main/.env.sample">ISEP-Frontend .env.sample file</a>
 
 ## :computer: Development
 
@@ -123,52 +166,11 @@ make docker-build-development
 make docker-run-development
 ```
 
-### Deploy to AWS as serverless application
 
-⚠ This is currently not working , see  [Deployment as serverless application does not work · Issue #153 · Boavizta/boaviztapi](https://github.com/Boavizta/boaviztapi/issues/153)
-
-Api can be self hosted to your own AWS account using the serverless framework.
-
-```sh
-# Install the serverless framework and plugins
-npm install -g serverless
-npm i
-# Authenticate
-export AWS_PROFILE=your-own-profile
-# Deploy to dev
-serverless deploy
-```
-
-_Fisrt packaging/deployment may takes a several minutes_
 
 ### OpenAPI specification (Swagger)
 
 Once API server is launched API swagger is available at [httsp://localhost:5000/docs](https://localhost:5000/docs).
-
-
-## :woman: Contributing
-
-See [contributing.md](./CONTRIBUTING.md).
-
-You can build a source distribution (installable with pip) with `make build`.
-
-## :one: Versioning
-
-We use [Semantic Versioning 2.0.0](https://semver.org/)
-
-|    Type     | Description                                                          |    Command        |
-| :---        |    :----:                                                            |              ---: |
-| MAJOR       | version when you make incompatible API changes                       | ```make major```  |
-| MINOR       | version when you add functionality in a backwards compatible manner  | ```make minor```  |
-| PATCH       | version when you make backwards compatible bug fixes                 | ```make patch```  |
-
-## :two: Publishing
-
-You can run:
-
-```shell
-API_TOKEN=<your_token> make distribute
-```
 
 ## :scroll: License
 
