@@ -186,7 +186,7 @@ if __name__ == '__main__':
 def my_schema():
     intro = open(os.path.join(os.path.dirname(__file__), 'routers/openapi_doc/intro_openapi.md'), 'r', encoding='utf-8')
     openapi_schema = get_openapi(
-        title="BOAVIZTAPI - DEMO",
+        title="Green Cloud Dashboard API - Based on Boavizta API",
         version=version,
         description=markdown.markdown(intro.read()),
         routes=app.routes,
@@ -206,7 +206,7 @@ async def welcome_page():
     html_content = """
     <html>
         <head>
-            <title>BOAVIZTAPI</title>
+            <title>SIG Green Cloud Dashboard Backend</title>
             <style>
                 * {
                     font-family: sans-serif;
@@ -215,19 +215,23 @@ async def welcome_page():
         </head>
         <body>
             <p align="center">
-                <img src="https://boavizta.org/media/site/d84925bc94-1642413712/boavizta-logo-4.png" width="100">
+                <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/tree/main/logos/Software-Improvement-Group.jpg" alt="Software Improvement Group" width="150">
+                <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/tree/main/logos/boaviztapi_color.svg" alt="BoaviztAPI" width="150">
+                <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/tree/main/logos/electricitymaps_logo.avif" alt="ElectricityMaps" width="150">
+                <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/tree/main/logos/leaner_cloud_logo.png" alt="LeanerCloud" width="150">
             </p>
             <h1 align="center">
-              Welcome to BOAVIZTAPI
+              Welcome to SIG's Green Cloud Dashboard Backend
             </h1>
             <h2 align="center">
-              Multicriteria & multistep impacts evaluations for digital assets
+              Multicriteria & multistep impact assessment and cost evaluations for digital assets
             </h2>
             </br>
-            <h3 align="center">See our github repository : <a href="https://github.com/Boavizta/boaviztapi">LINK</a></h2>
-            <h3 align="center">See OpenAPI specs (swagger) : <a href="docs">LINK</a></h2>
-            <h3 align="center">See our complete documentation : <a href="https://doc.api.boavizta.org/">LINK</a></h2>
+            <h3 align="center">See Boavizta's github repository : <a href="https://github.com/Boavizta/boaviztapi">LINK</a></h2>
+            <h3 align="center">See Boavizta's complete documentation : <a href="https://doc.api.boavizta.org/">LINK</a></h2>
             <h3 align="center">See the other resources of Boavizta : <a href="https://boavizta.org/">LINK</a> </h2>
+            <h3 align="center">See our github repository : <a href="https://github.com/ISEP-SIG/boaviztapi-ISEP/"LINK</a></h2>
+            <h3 align="center">See OpenAPI specs (swagger) : <a href="docs">LINK</a></h2>
             %s
         </body>
     </html>
