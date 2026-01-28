@@ -230,7 +230,7 @@ async def welcome_page():
             <h3 align="center">See Boavizta's github repository : <a href="https://github.com/Boavizta/boaviztapi">LINK</a></h2>
             <h3 align="center">See Boavizta's complete documentation : <a href="https://doc.api.boavizta.org/">LINK</a></h2>
             <h3 align="center">See the other resources of Boavizta : <a href="https://boavizta.org/">LINK</a> </h2>
-            <h3 align="center">See our github repository : <a href="https://github.com/ISEP-SIG/boaviztapi-ISEP/"LINK</a></h2>
+            <h3 align="center">See our github repository : <a href="https://github.com/ISEP-SIG/boaviztapi-ISEP/">LINK</a></h2>
             <h3 align="center">See OpenAPI specs (swagger) : <a href="docs">LINK</a></h2>
             %s
         </body>
