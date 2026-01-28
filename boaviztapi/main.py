@@ -215,10 +215,10 @@ async def welcome_page():
         </head>
         <body>
             <p align="center">
-                <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/tree/main/logos/Software-Improvement-Group.jpg" alt="Software Improvement Group" width="150">
-                <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/tree/main/logos/boaviztapi_color.svg" alt="BoaviztAPI" width="150">
-                <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/tree/main/logos/electricitymaps_logo.avif" alt="ElectricityMaps" width="150">
-                <img src="https://github.com/ISEP-SIG/boaviztapi-ISEP/tree/main/logos/leaner_cloud_logo.png" alt="LeanerCloud" width="150">
+                <img src="https://raw.githubusercontent.com/ISEP-SIG/boaviztapi-ISEP/refs/heads/main/logos/Software-Improvement-Group.jpg" alt="Software Improvement Group" width="150">
+                <img src="https://raw.githubusercontent.com/ISEP-SIG/boaviztapi-ISEP/refs/heads/main/logos/boaviztapi_color.svg" alt="BoaviztAPI" width="150" height="100">
+                <img src="https://raw.githubusercontent.com/ISEP-SIG/boaviztapi-ISEP/refs/heads/main/logos/electricitymaps_logo.avif" alt="ElectricityMaps" width="150">
+                <img src="https://raw.githubusercontent.com/ISEP-SIG/boaviztapi-ISEP/refs/heads/main/logos/leaner_cloud_logo.png" alt="LeanerCloud" width="150">
             </p>
             <h1 align="center">
               Welcome to SIG's Green Cloud Dashboard Backend
